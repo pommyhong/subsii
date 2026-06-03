@@ -261,7 +261,7 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .lb-tm{background:#fdf6e3;color:#9a6b00}
 .log-note{font-size:12px;color:var(--ink-2);line-height:1.55;margin-top:10px}
 .log-empty{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #ddd9cf;border-radius:16px;padding:18px;text-align:center}
-/* 🎯 Snapshot · From start — Peak-End close + journey context */
+/* 🎯 Note — Peak-End close + journey context */
 .snap-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:0 1px 2px rgba(0,0,0,.03);margin-top:8px}
 .snap-lead{font-size:13px;line-height:1.65;color:var(--ink-2);padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
 .snap-lead b{color:var(--ink);font-weight:600}
@@ -271,8 +271,6 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .snap-l{color:var(--ink-2);font-weight:500}
 .snap-v{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;font-size:15px}
 .snap-v .snap-sub{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px}
-.snap-row.snap-fwd .snap-v{color:#b07700}                     /* milestone — gold accent */
-.snap-row.snap-fwd .snap-l{color:var(--ink-2);font-weight:600}
 /* week selector label */
 .chip-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:24px;margin-bottom:4px}
 .chip-label + .week-nav{padding-top:0}
@@ -1007,8 +1005,7 @@ function render(){
   html+=s;
  }
 
- // 🎯 From start — journey context + Peak-End close
- const totalKm=cumKm();
+ // 🎯 Note — journey context + Peak-End close
  // streak: longest consecutive-week run streak ending at or before current week
  let _streak=0;
  for(let wi=Math.min(cw,W.length-1); wi>=0; wi--){
@@ -1022,20 +1019,16 @@ function render(){
  const _cads=[];
  W.forEach((ww,wi)=>ww.d.forEach(day=>{if(day.t!=='easy')return;const l=getLog(wi,day.d);if(l&&l.cad>0&&l.env!=='tm'&&!l.mix)_cads.push(l.cad)}));
  const _cadAvg=_cads.length?Math.round(_cads.reduce((a,b)=>a+b,0)/_cads.length):0;
- // next km milestone (round up to nice number)
- const _milestones=[25,50,75,100,150,200,250,300,400,500,600,750,1000];
- const _nextMs=_milestones.find(m=>m>totalKm)||Math.ceil(totalKm/100)*100+100;
  // phase description for lead text
  const _ph=W[cw].p;
  const _phDesc={Base:'สร้าง aerobic base',Threshold:'เพิ่ม T-pace tolerance','10K-Peak':'peak 10K speed',Recovery:'ฟื้น + adapt','M-Build':'สร้าง marathon endurance','M-Peak':'peak marathon fitness',Taper:'taper ก่อน race'}[_ph]||_ph;
 
- html+='<div class="section-l">🎯 From start</div>';
+ html+='<div class="section-l">🎯 Note</div>';
  html+='<div class="snap-card">';
  html+='<div class="snap-lead">ปอมกำลังเทรน <b>Sub-4</b> (วิ่งมาราธอน 42K ใน &lt; 4 ชม.) ที่ <b>ATM Bangkok</b> · ตอนนี้อยู่ <span class="phase-tag">'+_ph+'</span> ('+_phDesc+') สัปดาห์ <b>'+(cw+1)+'/30</b></div>';
  if(_streak>0)html+='<div class="snap-row"><span class="snap-l">สัปดาห์ติดต่อกัน</span><span class="snap-v">'+_streak+' weeks 🔥</span></div>';
  if(_long.km>0)html+='<div class="snap-row"><span class="snap-l">Longest run</span><span class="snap-v">'+_long.km+' <span class="snap-sub">km (W'+_long.w+')</span></span></div>';
  if(_cadAvg)html+='<div class="snap-row"><span class="snap-l">Cadence baseline</span><span class="snap-v">'+_cadAvg+' <span class="snap-sub">spm '+(_cadAvg>=170?'✅':'')+'</span></span></div>';
- html+='<div class="snap-row snap-fwd"><span class="snap-l">📍 Milestone ถัดไป</span><span class="snap-v">'+_nextMs+' <span class="snap-sub">km · เหลือ '+(_nextMs-totalKm).toFixed(1)+' km</span></span></div>';
  html+='</div>';
 
  // อ้างอิง — Pace + Carb รวมใต้ section เดียว แต่คนละแถว
