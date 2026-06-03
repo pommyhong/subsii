@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f5f1">
+<title>Pommy · Marathon Sub-4 Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+/* ===== design tokens ===== */
+:root{
+ --gap-section:24px; --gap-card:16px; --pad-card:16px; --radius:16px; --radius-sm:12px;
+ --ink:#1c1c1c; --ink-2:#55514a; --muted:#6f6b5d; --faint:#a8a496;
+ --line:#e6e2d8; --bg:#f6f5f1; --card:#fff;
+ --red:#e63012; --green:#2faa72; --gold:#b07700; --blue:#3a86c8;
+ /* type scale */
+ --fs-eyebrow:10px; --fs-cap:12px; --fs-body:14px; --fs-h3:16px; --fs-num:22px; --fs-hero:40px;
+}
+body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+.app{max-width:960px;margin:0 auto;padding:20px 16px 80px}
+.top-bar{display:flex;align-items:center;justify-content:space-between;padding:18px 0 14px;border-bottom:1px solid #e3e0d7;gap:12px;flex-wrap:wrap}
+.logo{font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.logo span{color:#e63012}
+.btn{font-family:inherit;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:7px 14px;border-radius:3px;border:1px solid;cursor:pointer;transition:all .15s;background:none}
+.btn-outline{border-color:#cfccc2;color:#6b6b6b}.btn-outline:hover{border-color:#9a968a;color:#1c1c1c}
+.btn-gold{border-color:#d6920a;color:#b07700}.btn-gold:hover{background:#f5a62318}
+.banner{background:#fdf6e3;border:1px solid #f0d89a;border-radius:3px;padding:10px 14px;margin-top:14px;font-size:11px;color:#9a6b00;line-height:1.5}
+.race-bar{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:14px}
+.race{background:#fff;border:1px solid #e3e0d7;border-radius:3px;padding:10px 12px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.race.next{border-color:#e63012}
+.race-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.race-name{font-size:13px;font-weight:600;color:#1c1c1c;line-height:1.3}
+.race-meta{font-size:10px;color:#6b6b6b;margin-top:2px}
+.prog-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}
+.prog{background:#fff;border:1px solid #e3e0d7;border-radius:3px;padding:10px 12px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.prog.ef{border-color:#bfdcf3}
+.prog-l{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.prog-v{font-size:20px;font-weight:700;line-height:1}
+.prog-v .arw{font-size:11px;margin-left:4px}
+.prog-u{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.day-log{display:flex;align-items:center;gap:10px;margin-top:8px;flex-wrap:wrap;padding-top:8px;border-top:1px dashed #ddd9cf;font-size:11px;color:#444;font-weight:600}
+.day-log .la{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.day-log .tm{color:var(--muted);font-weight:500}
+.day-log .ef{margin-left:auto;font-size:10px;font-weight:700;color:#3a86c8;background:#e8f2fb;border:1px solid #bfdcf3;border-radius:2px;padding:3px 7px}
+.sched-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.sched{width:100%;border-collapse:collapse;margin-top:2px;font-size:12px}
+.sched th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid #e3e0d7;white-space:nowrap}
+.sched td{padding:9px 8px;border-bottom:1px solid #eceae2;vertical-align:top}
+.sched tr:last-child td{border-bottom:none}
+.sched tr.today{background:#fdece9}
+.sched tr.done{background:#f4faf6}
+.sched tr.rest td{color:#aaa69a}
+.s-day{white-space:nowrap;font-weight:700;border-left:3px solid #ccc;padding-left:8px!important}
+.s-dt{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:1px}
+.s-today-tag{font-size:7px;background:#e63012;color:#fff;padding:1px 4px;border-radius:2px;margin-left:4px;letter-spacing:.06em;vertical-align:middle}
+.s-chip{display:inline-block;font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-bottom:4px}
+.s-ti{font-weight:600;color:#1c1c1c;line-height:1.3}
+.s-de{font-size:10px;color:var(--muted);line-height:1.45;margin-top:2px}
+.s-alt{font-size:10px;color:#9a6b00;margin-top:2px}
+.s-plan{white-space:nowrap;color:#555;font-weight:600}
+.s-res{color:#444;font-weight:600;white-space:nowrap}
+.s-res .tm{color:var(--muted)}
+.s-ef{display:inline-block;font-size:10px;font-weight:700;color:#3a86c8;background:#e8f2fb;border:1px solid #bfdcf3;border-radius:2px;padding:1px 5px;margin-left:5px}
+.s-none{color:#c4c0b4}
+.dist-chart{position:relative;display:flex;align-items:stretch;gap:6px;height:120px;padding:10px 6px 6px;border:1px solid #e3e0d7;border-radius:4px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.03);overflow:visible}
+.dc-track{position:relative}
+.dc-ghost{position:absolute;left:0;right:0;bottom:0;background:repeating-linear-gradient(45deg,#e8e5dd,#e8e5dd 4px,#f1efe9 4px,#f1efe9 8px);border-radius:3px 3px 0 0;min-height:2px}
+.dc-bar{position:relative}
+.chart-legend{display:flex;gap:16px;justify-content:center;font-size:10px;font-weight:600;color:var(--muted);margin-top:8px;margin-bottom:8px}
+.chart-legend span{display:inline-flex;align-items:center;gap:5px}
+.chart-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;font-style:normal}
+.lg-ghost{background:repeating-linear-gradient(45deg,#e8e5dd,#e8e5dd 3px,#f1efe9 3px,#f1efe9 6px)}
+.lg-actual{background:#52c896}
+.dc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.dc-km{font-size:10px;font-weight:700;color:#555;min-height:11px}
+.dc-track{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.dc-bar{width:100%;max-width:30px;border-radius:3px 3px 0 0;min-height:2px;transition:height .3s}
+.dc-d{font-size:10px;color:var(--muted)}
+.week-nav{display:flex;align-items:center;gap:0;overflow-x:auto;padding:16px 0 0;border-bottom:1px solid #e3e0d7;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.week-nav::-webkit-scrollbar{display:none}
+.wk-btn{font-family:inherit;font-size:10px;font-weight:600;padding:8px 10px;background:none;border:none;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;transition:all .12s;letter-spacing:.06em}
+.wk-btn:hover{color:#1c1c1c}
+.wk-btn.active{color:#1c1c1c;border-bottom-color:#e63012}
+.wk-btn.current{color:#b07700}
+.wk-btn{position:relative}
+.wk-dot{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:#2faa72}
+.wk-btn.active .wk-dot{background:#fff}
+.week-hero{padding:20px 0 18px;border-bottom:1px solid var(--line)}
+.week-hero-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.week-hero-l{flex:1;min-width:240px}
+.week-eyebrow{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.week-eyebrow .we-w{color:var(--red);font-size:13px}
+.week-focus{font-size:19px;font-weight:700;line-height:1.3;color:var(--ink)}
+.week-dates{font-size:12px;color:var(--muted);margin-top:5px;font-weight:400}
+/* monthly mileage prog tile (in top stats grid) */
+.prog-month-row{display:flex;align-items:center;gap:10px;margin-top:6px}
+.prog-month-ring{position:relative;width:42px;height:42px;flex-shrink:0}
+.prog-month-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.prog-month-r{flex:1;min-width:0}
+/* (legacy) monthly mileage tile — เก็บ CSS ไว้เผื่อใช้ที่อื่น */
+.month-tile{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;min-width:230px}
+.month-ring{position:relative;width:54px;height:54px;flex-shrink:0}
+.month-ring svg{transform:rotate(-90deg)}
+.month-ring-bg{stroke:#f1efe9;fill:none;stroke-width:6}
+.month-ring-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.22,1,.36,1)}
+.month-ring-pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.month-r{flex:1;min-width:0}
+.month-l{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.month-v{font-size:16px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.1}
+.month-v span{font-size:11px;color:var(--muted);font-weight:600}
+.month-u{font-size:10px;color:var(--muted);margin-top:2px}
+.month-u b{font-weight:700}
+/* weights routine list */
+.weights-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-top:8px}
+.weights-grp{margin-top:14px}
+.weights-grp:first-child{margin-top:0}
+.weights-grp-l{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.weights-grp-l::after{content:'';flex:1;height:1px;background:var(--line)}
+.weights-row{display:flex;justify-content:space-between;font-size:12px;padding:5px 0;color:var(--ink-2)}
+.weights-row b{font-weight:600;color:var(--ink)}
+.weights-row span{color:var(--muted);font-weight:500;font-variant-numeric:tabular-nums}
+.weights-note{font-size:11px;color:var(--muted);margin-top:14px;padding-top:10px;border-top:1px dashed var(--line);line-height:1.55}
+.phase-banner{display:flex;gap:3px;margin:16px 0}
+.ph-seg{flex:1;height:5px;border-radius:2px}
+.week-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:16px 0 24px}
+.stat{background:#fff;border:1px solid #e3e0d7;border-radius:3px;padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.stat-l{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.stat-v{font-size:22px;font-weight:700;line-height:1}
+.stat-u{font-size:10px;color:var(--muted);margin-top:2px}
+.load-bar{display:flex;align-items:center;gap:8px}
+.load-bar .track{flex:1;height:6px;background:#ece9e1;border-radius:3px;overflow:hidden}
+.load-bar .fill{height:100%;border-radius:3px;transition:width .4s}
+.load-bar .num{font-size:11px;font-weight:700;width:28px;text-align:right}
+.progress{background:#fff;border:1px solid #e3e0d7;border-radius:3px;padding:12px 16px;margin-top:8px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:6px}
+.progress-l{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.progress-v{font-size:11px;font-weight:700}
+.progress-track{height:8px;background:#ece9e1;border-radius:4px;overflow:hidden}
+.progress-fill{height:100%;border-radius:4px;transition:width .4s}
+.section-l{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--line);margin-top:24px}
+.days{display:grid;grid-template-columns:1fr;gap:10px}
+.day{background:#fff;border:1px solid #e7e4db;border-radius:4px;padding:14px 16px;position:relative;transition:.2s;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.day.today{background:#fdece9;border-color:#e63012}
+.day.rest{background:#f1efe9;border-color:#e7e4db;opacity:.75;box-shadow:none}
+.day.done{background:#eef8f2;border-color:#52c896}
+.day.done.q{background:#e3f4ea}
+.day-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.day-date{font-size:10px;font-weight:700;padding:2px 6px;border-radius:2px;letter-spacing:.08em;border:1px solid}
+.day-type{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.today-tag{margin-left:auto;background:#e63012;color:#fff;font-size:8px;font-weight:700;letter-spacing:.1em;padding:2px 6px;border-radius:2px}
+.day-title{font-size:14px;font-weight:600;color:#1c1c1c;line-height:1.3;margin-bottom:4px}
+.day.done .day-title{text-decoration:line-through;text-decoration-color:#52c89680;color:#2faa72}
+.day-desc{font-size:12px;color:#6b6b6b;line-height:1.6;margin-bottom:8px}
+.day-alt{font-size:11px;color:#9a6b00;background:#fdf6e3;border:1px solid #f0d89a;border-radius:2px;padding:5px 8px;line-height:1.5;margin-bottom:8px}
+.day-meta{display:flex;gap:10px;font-size:11px;color:#6b6b6b;flex-wrap:wrap}
+.day-meta .carb{color:#b07700;margin-left:auto}
+.pace-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px}
+.pace{background:#fff;border:1px solid #e7e4db;border-radius:3px;padding:7px 12px;display:flex;gap:8px;align-items:center}
+.pace .bar{width:3px;height:24px;border-radius:2px}
+.pace-l{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.pace-v{font-size:13px;font-weight:700}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin-top:8px}
+.legend{background:#fff;border:1px solid #e7e4db;border-radius:3px;padding:8px 10px}
+.legend-l{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:3px}
+.legend-v{font-size:13px;font-weight:700;color:#b07700}
+.legend-u{font-size:10px;color:var(--muted);margin-top:1px}
+/* ===== v2 redesign — radius 16, hero, race timeline, chips, HR chart ===== */
+.prog,.stat,.progress,.dist-chart{border-radius:16px}
+.prog{padding:16px}
+.prog-bar{gap:16px;margin-top:24px}
+.pace,.legend{border-radius:12px}
+/* hero — dark race-poster style · checkered subtle texture */
+.hero{position:relative;overflow:hidden;background:#1a1a1a;border-radius:20px;padding:16px;margin-top:16px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%),linear-gradient(45deg,#2a2a2a 25%,transparent 25%,transparent 75%,#2a2a2a 75%);background-size:28px 28px;background-position:0 0,14px 14px;opacity:.22;pointer-events:none;mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%);-webkit-mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%)}
+.hero-inner{position:relative;display:flex;align-items:center;column-gap:20px;row-gap:14px;flex-wrap:wrap}
+.hero-left{flex:1;min-width:200px}
+.hero-right{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+.hero-eyebrow{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#a8a8a0;margin-bottom:10px}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:#d4f54a;box-shadow:0 0 0 0 rgba(212,245,74,.5);animation:pulse 1.8s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(212,245,74,.55)}70%{box-shadow:0 0 0 9px rgba(212,245,74,0)}100%{box-shadow:0 0 0 0 rgba(212,245,74,0)}}
+.hero-race{font-size:24px;font-weight:800;line-height:1.15;color:#fff;letter-spacing:-.01em}
+.hero-meta{font-size:12px;color:#a8a8a0;margin-top:6px;line-height:1.5}
+.hero-meta b{color:#cfccc2;font-weight:600}
+.hero-countdown{display:flex;align-items:flex-start;gap:10px;font-variant-numeric:tabular-nums}
+.cd-block{display:flex;flex-direction:column;align-items:center;min-width:40px}
+.cd-num{font-size:32px;font-weight:800;line-height:1;letter-spacing:-.02em;color:#fff}
+.cd-unit{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:#7a7a72;margin-top:6px;font-weight:600}
+.cd-sep{font-size:22px;color:#3a3a3a;font-weight:300;line-height:1;padding-top:3px}
+.hero-goal{background:#d4f54a;color:#1a1a1a;padding:9px 14px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;letter-spacing:.01em;box-shadow:0 2px 10px rgba(212,245,74,.25)}
+.hero-prog-row{position:relative;display:flex;align-items:center;gap:12px;margin-top:20px;padding-top:18px;border-top:1px solid #2a2a2a}
+.hero-prog-l{font-size:11px;color:#a8a8a0;font-weight:600;white-space:nowrap}
+.hero-prog-track{flex:1;height:6px;background:#2a2a2a;border-radius:8px;overflow:hidden}
+.hero-prog-fill{height:100%;background:linear-gradient(90deg,#d4f54a,#9bd027);border-radius:8px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.hero-prog-v{font-size:11px;color:#d4f54a;font-weight:700;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}
+/* race timeline — mini pills (others, below hero) */
+.race-line{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+.rl-item{flex:1;min-width:220px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:14px}
+.rl-item.a{background:linear-gradient(135deg,#fff,#fff8f3);border-color:#f0b9a8}
+.rl-l{flex:1;min-width:0}
+.rl-name{font-size:13px;font-weight:700;color:var(--ink);line-height:1.2;display:flex;align-items:center;gap:6px}
+.rl-tag{font-size:8px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--red);background:#fdece9;padding:2px 6px;border-radius:16px}
+.rl-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.rl-cd{text-align:right;line-height:1;font-variant-numeric:tabular-nums}
+.rl-cd-n{font-size:20px;font-weight:800;color:var(--ink)}
+.rl-cd-u{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+/* week-nav as chips */
+.week-nav{border-bottom:none;gap:6px;padding:16px 0 6px}
+.wk-btn{border:1px solid #e3e0d7;background:#fff;border-radius:16px;padding:6px 13px;margin-bottom:0;color:var(--muted)}
+.wk-btn:hover{border-color:#9a968a;color:#1c1c1c}
+.wk-btn.current:not(.active){border-color:#f5a623;color:#b07700}
+.wk-btn.active{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+/* HR per session chart */
+.hr-chart{display:flex;flex-direction:column;gap:9px;background:#fff;border:1px solid #e3e0d7;border-radius:16px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.hr-row{display:flex;align-items:center;gap:10px}
+.hr-track{flex:1;height:14px;background:#f1efe9;border-radius:16px;overflow:hidden}
+.hr-fill{height:100%;border-radius:16px;transition:width .4s}
+.hr-val{width:58px;text-align:right;font-size:12px;font-weight:700;flex-shrink:0}
+.hr-val span{font-size:10px;color:var(--muted);font-weight:600}
+.hr-grp{display:flex;flex-direction:column;gap:5px}
+.hr-grp+.hr-grp{margin-top:5px;padding-top:11px;border-top:1px solid #f1efe9}
+.hr-glab{font-size:11px;font-weight:700}
+.hr-glab span{font-size:10px;color:var(--muted);font-weight:600}
+.hr-k{width:30px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;flex-shrink:0}
+/* type chip legend */
+.type-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.tl-chip{font-size:10px;font-weight:700;padding:3px 11px;border-radius:16px}
+/* compact reference pills (pace + carb) */
+.ref-row{display:flex;flex-wrap:wrap;gap:8px}
+.ref-pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e7e4db;border-radius:16px;padding:6px 12px;font-size:11px;font-weight:600;color:#444;white-space:nowrap}
+.ref-pill b{font-weight:700;color:#1c1c1c}
+.ref-pill i{color:#a8a496;font-style:normal;font-size:10px}
+.ref-sub{font-size:11px;font-weight:600;color:var(--ink-2);margin:16px 0 8px}
+.ref-sub i{color:var(--faint);font-weight:500;font-style:normal}
+.section-l + .ref-sub{margin-top:0}
+.ref-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* บันทึกผลการซ้อม — card (big date · RPE · badges · note) */
+.log-list{display:flex;flex-direction:column;gap:16px}
+.log-item{display:flex;gap:16px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.log-date{flex-shrink:0;text-align:center;line-height:1;min-width:44px}
+.log-date .ld-num{display:block;font-size:30px;font-weight:700;color:var(--ink)}
+.log-date .ld-mo{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-top:3px}
+.log-body{flex:1;min-width:0}
+.log-head{display:flex;align-items:flex-start;gap:10px}
+.log-title{flex:1;font-size:15px;font-weight:700;color:var(--ink);line-height:1.3}
+.log-tw{font-size:11px;font-weight:600;color:var(--muted)}
+.log-rpe{flex-shrink:0;text-align:right;font-size:20px;font-weight:800;color:var(--gold);line-height:1}
+.log-rpe span{display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--muted);margin-top:2px}
+.log-item .s-chip{display:inline-block;margin:7px 0 0}
+.log-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.lb{font-size:11px;font-weight:600;padding:4px 10px;border-radius:16px;background:#f1efe9;color:var(--ink-2);white-space:nowrap}
+.lb-km{background:#e8f2fb;color:#3a86c8}
+.lb-pace{background:#f0ebff;color:#7d5cf0}
+.lb-hr{background:#fdece9;color:#d62a0e}
+.lb-te{background:#eaf7f0;color:#2faa72}
+.lb-ef{background:#e8f2fb;color:#3a86c8}
+.lb-tm{background:#fdf6e3;color:#9a6b00}
+.log-note{font-size:12px;color:var(--ink-2);line-height:1.55;margin-top:10px}
+.log-empty{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #ddd9cf;border-radius:16px;padding:18px;text-align:center}
+/* week selector label */
+.chip-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:24px;margin-bottom:4px}
+.chip-label + .week-nav{padding-top:0}
+/* HR daily SVG chart */
+.hr-svg-wrap{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px 10px 6px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.hr-svg{width:100%;height:auto;display:block;font-family:'Google Sans',sans-serif}
+.hr-grid{stroke:#eceae2;stroke-width:1}
+.hr-axis{fill:var(--muted);font-size:11px;font-weight:600}
+.hr-axis-bold{fill:var(--ink-2);font-size:12px;font-weight:700}
+/* HR filter chips */
+.hr-tabs{display:flex;gap:6px;margin-bottom:10px}
+.hr-tab{font-family:inherit;font-size:11px;font-weight:600;padding:6px 14px;border-radius:16px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;transition:all .15s}
+.hr-tab:hover{border-color:#9a968a;color:var(--ink)}
+.hr-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* dist chart tooltip */
+.dc-col{position:relative;cursor:pointer}
+.dc-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.5;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10;box-shadow:0 6px 18px rgba(0,0,0,.18);min-width:180px;text-align:left}
+.dc-tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a1a}
+.dc-col:hover .dc-tip{opacity:1}
+.dc-tip-title{font-weight:700;color:#fff;margin-bottom:6px;font-size:12px}
+.dc-tip-row{display:flex;justify-content:space-between;gap:12px;color:#cfccc2}
+.dc-tip-row b{color:#fff;font-weight:600}
+.dc-tip-delta{margin-top:6px;padding-top:6px;border-top:1px solid #2a2a2a;font-size:10px}
+.dc-tip-delta.short{color:#f5a623}
+.dc-tip-delta.hit{color:#52c896}
+.hr-max-tick{stroke:#b9786a;stroke-width:2;stroke-linecap:round}
+.hr-leg{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:8px;font-size:10px;color:var(--ink-2);font-weight:600}
+.hr-lg{display:inline-flex;align-items:center;gap:5px}
+.hr-lgd{width:9px;height:9px;border-radius:50%}
+.hr-lgl{width:14px;height:2px;background:var(--ink);border-radius:2px}
+.hr-lgl.max{background:#b9786a;height:2px;width:14px}
+/* race timeline polish — connector + hover + next pulse */
+.race-line{position:relative}
+.rl-item{flex:1;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 14px;transition:transform .2s,box-shadow .2s}
+.rl-item:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.06)}
+.rl-item.next{border-color:var(--red);box-shadow:0 0 0 3px rgba(230,48,18,.10)}
+.rl-item.next .rl-dot{animation:pulse 1.8s infinite}
+@media(max-width:640px){
+.week-stats{grid-template-columns:1fr 1fr}
+.prog-bar{grid-template-columns:1fr 1fr}
+.hero-inner{flex-direction:column;align-items:flex-start;gap:18px}
+.cd-num{font-size:34px}
+.cd-block{min-width:40px}
+.hero-race{font-size:20px}
+.race-line{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hero" id="hero"></div>
+<div id="races"></div>
+<div class="prog-bar" id="progbar"></div>
+<div id="content"></div>
+</div>
+
+<script>
+const PLAN_START=new Date(2026,4,4); // Mon 4 May 2026
+const SESS={
+ rest:{c:'#a8a496',tc:'var(--muted)',l:'พัก',bg:'#eeece6'},
+ easy:{c:'#52c896',tc:'#2faa72',l:'Easy',bg:'#eaf7f0'},
+ quality:{c:'#e63012',tc:'#d62a0e',l:'Quality',bg:'#fdece9'},
+ long:{c:'#6ab8f0',tc:'#3a86c8',l:'Long',bg:'#e8f2fb'},
+ cross:{c:'#b090ff',tc:'#7d5cf0',l:'Cross',bg:'#f0ebff'},
+ race:{c:'#e63012',tc:'#fff',l:'RACE',bg:'#e63012'},
+};
+const CARB={rest:[180,240],easy:[300,360],quality:[420,480],long:[480,560],race:[550,650]};
+const PHCOLOR={Base:'#2f9e6a',Threshold:'#cf8f00','10K-Peak':'#e63012',Recovery:'#3a86c8','M-Build':'#2f9e6a','M-Peak':'#e63012',Taper:'#3a86c8'};
+// races (A-race = ATM marathon) · เพซเป้าหมายตามประเภท (ใช้ใน schedule)
+const RACES=[
+ {n:'ASICS Meta Time Trials 2026',short:'ASICS 10K',date:new Date(2026,7,16),loc:'สะพานพระราม 8, bangkok',goal:'sub 45 นาที',meta:'16 ส.ค. · 10K · sub-45',full:'อาทิตย์ที่ 16 ส.ค. 2026 · 10K · สะพานพระราม 8'},
+ {n:'ATM Bangkok Marathon 42K',short:'ATM 42K',date:new Date(2026,10,29),loc:'ราชดำเนิน, bangkok',goal:'sub 4 ชั่วโมง',meta:'29 พ.ย. · sub-4 🎯',full:'อาทิตย์ที่ 29 พ.ย. 2026 · ราชดำเนิน',a:true},
+ {n:'Bangsaen 21K',short:'Bangsaen 21K',date:new Date(2026,11,19),loc:'บางแสน, ชลบุรี',goal:'recovery',meta:'~19 ธ.ค. · recovery',full:'~19 ธ.ค. 2026 · บางแสน'},
+];
+const TPACE={easy:'E 6:00–6:20',quality:'T–I 5:05–5:30',long:'E 6:10–6:30',cross:'—',rest:'—',race:'race pace'};
+// ท่าเวทประจำของปอม — runner-focused strength (template ปกติ · deload week ลด volume เอง)
+const WEIGHTS_ROUTINE=[
+ {l:'Compound (heavy first)',items:[['Goblet squat','3 × 8'],['RDL','3 × 8'],['Bulgarian split squat','3 × 8 /ขา'],['Hip thrust','3 × 10']]},
+ {l:'Glute med · accessory',items:[['Calf raise','3 × 12'],['Monster walk (band)','2–3 × 15 /ทิศ'],['Clamshell (band)','2 × 15 /ข้าง']]},
+ {l:'Core · plyo (last)',items:[['Side plank','3 × 30–40 วิ /ข้าง'],['Dead bug','3 × 10'],['Pogo hops','3 × 20 วิ']]},
+];
+
+// d=mon0..sun6, t=type, k=km, m=min, ti=title, de=desc, al=alt, ca=carb
+const W=[
+// PHASE A: BASE REBUILD
+{w:1,p:'Base',f:'กลับมาจาก off-season — Easy ทุกอย่าง ฟังร่างกาย',k:28,ls:30,d:[
+ {d:0,t:'cross',k:0,m:45,ti:'Weights เบา',de:'Volume -50% จากปกติ — กลับมาเริ่มจากศูนย์',ca:'rest'},
+ {d:1,t:'easy',k:6,m:40,ti:'Easy 40 นาที',de:'6:30/km หาความรู้สึก ไม่ดูนาฬิกา',al:'30 นาที',ca:'easy'},
+ {d:2,t:'easy',k:6,m:40,ti:'Easy 40 นาที',de:'6:30/km เบาสบาย',al:'30 นาที หรือ ยืด',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'หรือยืด/foam roll 20 นาที',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที (เบา)',de:'6:30–6:40/km',ca:'easy'},
+ {d:5,t:'long',k:11,m:70,ti:'Long Run 70 นาที',de:'6:30/km ห้ามเร็ว — Saturday morning ตี 5',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:2,p:'Base',f:'Long ย้ายอาทิตย์ (ศุกร์มี dinner) · Thu แตะ quality เบาๆ',k:46,ls:50,d:[
+ {d:0,t:'cross',k:0,m:50,ti:'Weights + Core',de:'Glute med, single-leg, plank · RPE 7-8',ca:'rest'},
+ {d:1,t:'easy',k:6,m:40,ti:'Easy 40 นาที',de:'6:00–6:20/km · conversational',al:'35 นาที',ca:'easy'},
+ {d:2,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'6:00–6:20/km',al:'35 นาที',ca:'easy'},
+ {d:3,t:'quality',k:7,m:50,ti:'Quality: Strides + Tempo',de:'WU 10\' · 6×20s strides (60s jog) · 3×3min @ T 5:05–5:15 (2\' easy) · CD 10\'',al:'ตัด tempo เหลือ 2 set ถ้าเหนื่อย',ca:'quality'},
+ {d:4,t:'easy',k:5,m:30,ti:'Easy 30 นาที',de:'6:20/km · มี dinner คืนนี้',ca:'easy'},
+ {d:5,t:'easy',k:5,m:30,ti:'Easy shakeout 30 นาที',de:'6:20/km · เก็บขาให้ Sun long',ca:'easy'},
+ {d:6,t:'long',k:16,m:100,ti:'Long Run 15-16 km',de:'6:20/km default · 6:15 ถ้า HR < 165 · gel km 8',ca:'long'},
+]},
+{w:3,p:'Base',f:'Thu off (ดูหนัง) · เริ่มแตะ tempo · long กลับมา Sat',k:42,ls:46,d:[
+ {d:0,t:'cross',k:0,m:50,ti:'Weights + Core',de:'Glute med, single-leg, plank · RPE 7-8',ca:'rest'},
+ {d:1,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'6:00–6:20/km',al:'35 นาที',ca:'easy'},
+ {d:2,t:'quality',k:7,m:55,ti:'Quality: Strides + Tempo',de:'WU 10\' · 6×20s strides (60s jog) · 3×4min @ T 5:05–5:15 (2\' easy) · CD 10\'',al:'ตัด tempo เหลือ 2 set',ca:'quality'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก — ดูหนัง 🎬',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:30,ti:'Easy shakeout 30 นาที',de:'6:20/km · เก็บขาให้ Sat long',ca:'easy'},
+ {d:5,t:'long',k:18,m:110,ti:'Long Run 17-18 km',de:'6:20–6:30/km · HR < 172 · gel km 8 + 14',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:4,p:'Base',f:'Recovery Week — ลด 15%',k:30,ls:30,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-30% volume',ca:'rest'},
+ {d:1,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'6:30/km',al:'35 นาที',ca:'easy'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'6:30/km',al:'25 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'rest',k:0,m:0,ti:'พัก หรือ ยืด',de:'optional easy 25 นาที',ca:'rest'},
+ {d:5,t:'long',k:12,m:75,ti:'Long Run 75 นาที (deload)',de:'6:30/km เบามาก',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:5,p:'Base',f:'Push base — เพิ่ม strides 6',k:40,ls:43,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'Full body',ca:'rest'},
+ {d:1,t:'easy',k:9,m:58,ti:'Easy 55 นาที + 6 Strides',de:'6:20/km + strides 100m ×6',al:'45 นาที + 4 strides',ca:'easy'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'6:25/km',al:'40 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:17,m:108,ti:'Long Run 105 นาที',de:'6:20/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:6,p:'Base',f:'Last base week — prep for quality',k:45,ls:48,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'easy',k:10,m:62,ti:'Easy 60 นาที + 8 Strides',de:'6:15–6:20/km + strides 100m ×8',al:'50 นาที + 6 strides',ca:'easy'},
+ {d:2,t:'easy',k:9,m:56,ti:'Easy 55 นาที',de:'6:20/km',al:'45 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:20,m:128,ti:'Long Run 2 ชม.',de:'6:20/km — ทำได้ก็พร้อมเข้า quality phase',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+
+// PHASE B: 10K BLOCK
+{w:7,p:'Threshold',f:'เริ่ม T-pace อย่างระมัดระวัง — ITB watch',k:45,ls:55,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights + Core',de:'Stability focus',ca:'rest'},
+ {d:1,t:'quality',k:8,m:50,ti:'Q1: Threshold Intervals',de:'WU 15\' Easy → 3×1km @ T-pace (5:20–5:30/km) rest 90" → CD 10\'',al:'WU 15\' → 2×1km T → CD',ca:'quality'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'6:20/km — ห้ามเร็ว',al:'40 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:16,m:100,ti:'Long Run 100 นาที',de:'6:15–6:20/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:8,p:'Threshold',f:'เพิ่ม T volume',k:48,ls:60,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:9,m:55,ti:'Q1: 4×1km T-pace',de:'WU 15\' → 4×1km @ T (5:20–5:30) rest 90" → CD 10\'',al:'3×1km',ca:'quality'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'',al:'40 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:113,ti:'Long Run 110 นาที',de:'6:15/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:9,p:'Threshold',f:'T progression — longer reps',k:50,ls:65,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:10,m:60,ti:'Q1: 4×1.5km T-pace',de:'WU 15\' → 4×1.5km @ T rest 90" → CD 10\'',al:'3×1.5km',ca:'quality'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 + 4 Strides',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:113,ti:'Long Run 110 นาที',de:'6:10/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:10,p:'Threshold',f:'Recovery before Interval phase',k:38,ls:42,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-30%',ca:'rest'},
+ {d:1,t:'quality',k:8,m:50,ti:'Q1: T-pace เบา',de:'WU 15\' → 2×1.5km T rest 90" → CD 10\'',al:'Easy 45 นาที',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:14,m:90,ti:'Long Run 90 นาที (deload)',de:'6:20/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:11,p:'10K-Peak',f:'เริ่ม I-pace! 1000m intervals',k:50,ls:72,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:9,m:55,ti:'Q1: T-pace 3×1km',de:'WU 15\' → 3×1km T rest 90" → CD 10\'',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'พักให้ขาสด',ca:'easy'},
+ {d:3,t:'quality',k:9,m:58,ti:'Q2: Intervals 1000m',de:'WU 15\' → 4×1000m @ I-pace (4:55–5:05/km) rest 3\' → CD 10\'',al:'3×1000m',ca:'quality'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:113,ti:'Long Run 110 นาที',de:'6:10/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:12,p:'10K-Peak',f:'I-pace peak — 5×1000m',k:50,ls:76,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:10,m:60,ti:'Q1: Continuous T 18 นาที',de:'WU 15\' → T-pace 18 นาทีต่อเนื่อง → CD 10\'',al:'3×1.5km T แทน',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'quality',k:10,m:62,ti:'Q2: 5×1000m I-pace',de:'WU 15\' → 5×1000m I rest 3\' → CD 10\'',al:'4×1000m',ca:'quality'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:113,ti:'Long Run 110 นาที',de:'6:10/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:13,p:'10K-Peak',f:'Peak — Mixed I + R',k:50,ls:78,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:10,m:60,ti:'Q1: T-pace 4×1.5km',de:'WU 15\' → 4×1.5km T rest 90" → CD 10\'',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'quality',k:10,m:62,ti:'Q2: I + R Mixed',de:'WU 15\' → 3×1200m I-pace rest 3\' + 3×200m @ R-pace (4:30–4:40) rest 200m jog → CD',al:'3×1000m I เท่านั้น',ca:'quality'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:16,m:100,ti:'Long Run 100 + 4 Strides',de:'6:10/km + strides ท้ายวิ่ง',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:14,p:'Taper',f:'Taper start — ลด volume เก็บ intensity',k:38,ls:50,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-40% volume',ca:'rest'},
+ {d:1,t:'quality',k:8,m:50,ti:'Q1: T-pace 3×1km',de:'WU 15\' → 3×1km T rest 90" → CD 10\'',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 + 4 Strides',de:'',ca:'easy'},
+ {d:5,t:'long',k:12,m:75,ti:'Easy Long 75 นาที',de:'6:20/km — เก็บขา',ca:'easy'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:15,p:'Taper',f:'🏁 Race Week — ASICS 10K Sub-45',k:23,ls:25,d:[
+ {d:0,t:'rest',k:0,m:0,ti:'พักหรือ Weights upper เท่านั้น',de:'ไม่แตะขา',ca:'rest'},
+ {d:1,t:'easy',k:6,m:38,ti:'Easy 30 + 1km @ T + 4 Strides',de:'WU 20\' → 1km T-pace → 4×100m strides → CD — dress rehearsal',ca:'easy'},
+ {d:2,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:3,t:'easy',k:4,m:25,ti:'Easy 25 + 4 Strides',de:'6:20/km สบาย',ca:'easy'},
+ {d:4,t:'rest',k:0,m:0,ti:'พักสนิท + Carb Load D1',de:'8–10g/kg = 480–600g',ca:'race'},
+ {d:5,t:'easy',k:3,m:20,ti:'Shakeout 3km + Carb Load D2',de:'4×100m strides ท้ายวิ่ง — 480–600g คาร์บ',ca:'race'},
+ {d:6,t:'race',k:10,m:45,ti:'🏁 ASICS 10K Sub-45',de:'open 4:38–4:40/km กม.1–3 → 4:32–4:35 กม.4–7 → all-out 8–10',ca:'race'},
+]},
+
+// PHASE C: RECOVERY
+{w:16,p:'Recovery',f:'Easy week post-race — ฟื้นตัว',k:25,ls:22,d:[
+ {d:0,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+ {d:1,t:'easy',k:6,m:40,ti:'Easy 40 นาที',de:'6:30/km ดูร่างกาย',al:'30 นาที',ca:'easy'},
+ {d:2,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',al:'ยืด',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'easy',k:9,m:58,ti:'Easy 55 นาที',de:'6:25/km — ไม่มี long pace',ca:'easy'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+
+// PHASE D: MARATHON BLOCK
+{w:17,p:'M-Build',f:'Marathon block start — rebuild mileage',k:50,ls:55,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'easy',k:9,m:58,ti:'Easy 55 + 6 Strides',de:'6:20/km',al:'45 นาที + 4 strides',ca:'easy'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'',al:'40 นาที',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:115,ti:'Long Run 18km',de:'6:15/km — กลับมาเริ่ม long ยาว',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:18,p:'M-Build',f:'Build long run',k:55,ls:60,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'easy',k:10,m:62,ti:'Easy 60 + 6 Strides',de:'6:15/km',al:'50 นาที',ca:'easy'},
+ {d:2,t:'easy',k:9,m:56,ti:'Easy 55 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:22,m:140,ti:'Long Run 22km',de:'6:10–6:15/km',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:19,p:'M-Build',f:'⭐ Intro Marathon Pace work',k:58,ls:68,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:10,m:60,ti:'Q1: T-pace 4×1.5km',de:'WU 15\' → 4×1.5km T rest 90" → CD 10\'',al:'3×1.5km',ca:'quality'},
+ {d:2,t:'easy',k:9,m:56,ti:'Easy 55 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:24,m:148,ti:'Long Run 24km — first MP block',de:'18km Easy (6:15) + 6km @ MP (5:41/km) — feel marathon pace ในขาเหนื่อย',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:20,p:'Recovery',f:'Deload — recovery week',k:45,ls:48,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-30%',ca:'rest'},
+ {d:1,t:'easy',k:9,m:56,ti:'Easy 55 นาที',de:'6:20/km',al:'45 นาที',ca:'easy'},
+ {d:2,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:18,m:115,ti:'Long Run 18km easy',de:'6:20/km — deload',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:21,p:'M-Build',f:'MP intro proper — 8km @ MP',k:60,ls:72,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:10,m:60,ti:'Q1: T-pace 5×1km + 4 Strides',de:'WU 15\' → 5×1km T rest 90" → 4×100m strides → CD',ca:'quality'},
+ {d:2,t:'easy',k:9,m:56,ti:'Easy 55 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:24,m:148,ti:'Long Run 24km — 8km MP',de:'16km Easy + 8km @ MP (5:41) — เริ่มยาวขึ้น',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:22,p:'M-Build',f:'Long run 26 — ยังไม่เคย',k:62,ls:75,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:11,m:65,ti:'Q1: T-pace 5×1.5km',de:'WU 15\' → 5×1.5km T rest 90" → CD 10\'',al:'4×1.5km',ca:'quality'},
+ {d:2,t:'easy',k:10,m:62,ti:'Easy 60 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:26,m:160,ti:'Long Run 26km — 8km MP',de:'18km Easy + 8km @ MP — first 26',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:23,p:'M-Peak',f:'Big long + MP block 10km',k:65,ls:80,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:11,m:65,ti:'Q1: T-pace 4×2km',de:'WU 15\' → 4×2km @ T (5:25/km) rest 2\' → CD 10\'',al:'3×2km',ca:'quality'},
+ {d:2,t:'easy',k:10,m:62,ti:'Easy 60 + 4 Strides',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:28,m:175,ti:'Long Run 28km — 10km MP',de:'18km Easy + 10km @ MP — practice gel/water',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:24,p:'Recovery',f:'Deload before peak weeks',k:50,ls:55,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-30%',ca:'rest'},
+ {d:1,t:'quality',k:9,m:55,ti:'Q1: T-pace 3×1km เบา',de:'WU 15\' → 3×1km T → CD 10\'',ca:'quality'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:20,m:128,ti:'Long Run 20km easy',de:'6:20/km — deload',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:25,p:'M-Peak',f:'Long run 30 — longest yet',k:65,ls:82,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:11,m:65,ti:'Q1: T-pace 5×1.5km',de:'WU 15\' → 5×1.5km T rest 90" → CD 10\'',ca:'quality'},
+ {d:2,t:'easy',k:10,m:62,ti:'Easy 60 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:30,m:188,ti:'Long Run 30km — 10km MP',de:'20km Easy + 10km @ MP — race rehearsal',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:26,p:'M-Peak',f:'MP focus — 14km MP block',k:65,ls:84,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:11,m:65,ti:'Q1: T-pace 4×2km',de:'WU 15\' → 4×2km T rest 2\' → CD',ca:'quality'},
+ {d:2,t:'easy',k:10,m:62,ti:'Easy 60 + 4 Strides',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:28,m:172,ti:'Long Run 28km — 14km MP!',de:'14km Easy + 14km @ MP — biggest MP block ของ plan',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:27,p:'M-Peak',f:'⭐ 32km long run — peak',k:65,ls:86,d:[
+ {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
+ {d:1,t:'quality',k:11,m:65,ti:'Q1: Continuous T 20 นาที',de:'WU 15\' → T-pace 20 นาทีต่อเนื่อง → CD 10\'',al:'4×1.5km T แทน',ca:'quality'},
+ {d:2,t:'easy',k:10,m:62,ti:'Easy 60 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:7,m:45,ti:'Easy 45 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:32,m:200,ti:'Long Run 32km — final big long',de:'22km Easy + 10km @ MP — practice everything (gel/shoes/outfit)',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:28,p:'Taper',f:'Taper start — ลด volume -20%',k:50,ls:60,d:[
+ {d:0,t:'cross',k:0,m:40,ti:'Weights เบา',de:'-40%',ca:'rest'},
+ {d:1,t:'quality',k:9,m:55,ti:'Q1: T-pace 3×1.5km + 4 Strides',de:'WU 15\' → 3×1.5km T rest 90" → 4×100m strides → CD',ca:'quality'},
+ {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:5,t:'long',k:22,m:138,ti:'Long Run 22km — 6km MP',de:'16km Easy + 6km @ MP — last meaningful MP feel',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:29,p:'Taper',f:'Taper deep — ลด volume -45%',k:35,ls:38,d:[
+ {d:0,t:'cross',k:0,m:30,ti:'Weights เบามาก',de:'-60% upper body เน้น',ca:'rest'},
+ {d:1,t:'quality',k:8,m:50,ti:'Q1: T-pace 2×1.5km + 4 Strides',de:'WU 15\' → 2×1.5km T → 4×100m strides → CD',ca:'quality'},
+ {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:4,t:'easy',k:4,m:25,ti:'Easy 25 + 4 Strides',de:'',ca:'easy'},
+ {d:5,t:'long',k:14,m:88,ti:'Mid-long 14km — 4km MP',de:'10km Easy + 4km @ MP — short and sharp',ca:'long'},
+ {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
+]},
+{w:30,p:'Taper',f:'🏁 RACE WEEK — ATMBKK 42K Sub-4',k:22,ls:25,d:[
+ {d:0,t:'rest',k:0,m:20,ti:'พัก หรือ Weights upper เบามาก',de:'ไม่แตะขา',ca:'rest'},
+ {d:1,t:'easy',k:6,m:38,ti:'Easy 30 + 2km MP + 4 Strides',de:'WU 15\' → 2km @ MP → 4×100m strides → CD — dress rehearsal',ca:'easy'},
+ {d:2,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
+ {d:3,t:'easy',k:4,m:25,ti:'Easy 25 + 4 Strides',de:'6:25/km',ca:'easy'},
+ {d:4,t:'rest',k:0,m:0,ti:'พักสนิท + Carb Load D1',de:'8–10g/kg = 480–600g — เตรียม bib/เสื้อผ้า',ca:'race'},
+ {d:5,t:'easy',k:3,m:20,ti:'Shakeout 3km + Carb Load D2',de:'4×100m strides — 480–600g คาร์บ',ca:'race'},
+ {d:6,t:'race',k:42,m:240,ti:'🏁 ATMBKK Marathon Sub-4',de:'Even pace 5:41/km — กม.1–10 ระวังอย่าเร็ว, กม.10–30 ล็อค pace, กม.30–42 ขุด',ca:'race'},
+]},
+];
+
+const DAYS=['จ','อ','พ','พฤ','ศ','ส','อา'];
+const MONTHS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+
+function dateOf(wi,di){const d=new Date(PLAN_START);d.setDate(d.getDate()+wi*7+di);return d}
+function fmt(d){return d.getDate()+' '+MONTHS[d.getMonth()]}
+function curWeek(){const diff=Math.floor((new Date()-PLAN_START)/(7*864e5));return Math.max(-1,Math.min(diff,W.length-1))}
+function curDay(){const diff=Math.floor((new Date()-PLAN_START)/864e5);if(diff<0||diff>=W.length*7)return -1;return diff%7}
+
+let selected=Math.max(0,curWeek());
+let heroAnimated=false;
+let done={};
+try{const s=localStorage.getItem('mp-done');if(s)done=JSON.parse(s)}catch(e){}
+// ⚠️ AUTO-GENERATED จาก Strava โดย sync-strava.js (พ่วง /run-coach) — อย่าแก้มือ
+// env:'tm'=treadmill/incline → ตัดออกจาก EF · mix:1=หลาย activity วันเดียว → ตัดจาก EF
+const SEED=/*SEED:START*/{
+ 'w0d1':{km:5.02,min:31.38,hr:162.3,hx:173,cad:177,env:"tm"},'w0d5':{km:14.36,min:105.12,hr:169.1,hx:180,cad:171,type:"long",te:3.8,note:"Aerobic base กลับมา · 0 soreness post-run"},
+ 'w1d1':{km:6.23,min:45.47,hr:161.05,hx:174,cad:173,mix:1},'w1d2':{km:6.66,min:46.47,hr:168,hx:182,cad:173,type:"easy",note:"easy effort จริง แม้ heat 31°C"},'w1d3':{km:10.05,min:61.03,hr:162.5,hx:195,cad:160,mix:1},'w1d6':{km:16.57,min:109.45,hr:170.4,hx:182,cad:176,type:"long",te:4.5,note:"Breakthrough — ระยะ+pace ดีขึ้น HR เท่าเดิม, decoupling หาย"},
+ 'w2d1':{km:5.34,min:37.78,hr:158.1,hx:179,cad:169},'w2d2':{km:5.44,min:34.13,hr:163.51,hx:193,cad:170,mix:1,type:"quality",rpe:8,te:3.1,note:"Intervals 3×4min ครบ แต่ overpace (วิ่ง I แทน T) · max HR 193"},'w2d4':{km:6,min:36.92,hr:154.5,hx:164,cad:183,env:"tm",type:"easy",rpe:2,note:"Treadmill · cadence 182 breakthrough · feel Very Strong"},'w2d5':{km:18.12,min:128.57,hr:173.9,hx:185,cad:170,type:"long",te:4.6,note:"18km milestone แต่ HR เกิน cap · fatigue carry + shoe issue"},
+ 'w3d1':{km:6.16,min:35.15,hr:162.8,hx:170,cad:180,env:"tm",type:"easy",note:"Treadmill incline 2.5% · easy baseline ติดแน่น"},'w3d2':{km:4.22,min:28.28,hr:159.7,hx:180,cad:170,mix:1,type:"easy",note:"Easy + 5 strides · cadence ramp 184→193"},'w3d5':{km:9.79,min:67.87,hr:158.15,hx:175,cad:171,mix:1,type:"long",note:"Easy long split 2 รอบ · recovery > long-run adaptation"},
+ 'w4d1':{km:11.26,min:77.2,hr:166.76,hx:182,cad:172,mix:1,type:"quality",rpe:7,note:"10K under-fueled (ไม่ได้กินก่อนซ้อม) · HR drift +17 = lactate accumulate ก่อน aerobic ceiling · max HR 179 = ไม่ redline"}
+}/*SEED:END*/;
+const DONESEED=/*DONE:START*/{
+ 'w0d1':1,'w0d2':1,'w0d5':1,'w0d6':1,
+ 'w1d0':1,'w1d1':1,'w1d2':1,'w1d3':1,'w1d6':1,
+ 'w2d0':1,'w2d1':1,'w2d2':1,'w2d4':1,'w2d5':1,
+ 'w3d0':1,'w3d1':1,'w3d2':1,'w3d5':1,'w3d6':1,
+ 'w4d0':1,'w4d1':1
+}/*DONE:END*/;
+// data = Strava-generated SEED/DONESEED เท่านั้น (read-only dashboard · ไม่อ่าน/เขียน localStorage)
+let log=JSON.parse(JSON.stringify(SEED));
+done=JSON.parse(JSON.stringify(DONESEED));
+
+function isDone(wi,di){return !!done['w'+wi+'d'+di]}
+function wkDone(wi){return W[wi].d.filter(x=>x.t!=='rest'&&isDone(wi,x.d)).length}
+function wkTotal(wi){return W[wi].d.filter(x=>x.t!=='rest').length}
+
+function getLog(wi,di){return log['w'+wi+'d'+di]||null}
+// EF = ความเร็ว (m/min) ÷ HR เฉลี่ย — สูง=ฟิตขึ้น (เร็วขึ้น หรือ HR ต่ำลง ดันค่าขึ้นทั้งคู่)
+function efOf(l){return(l&&l.km>0&&l.min>0&&l.hr>0)?(l.km*1000/l.min/l.hr):null}
+// EF series in chronological order, outdoor easy runs only — ตัด tm + mixed (หลาย activity/วัน)
+function efSeries(){const a=[];W.forEach((w,wi)=>w.d.forEach(day=>{if(day.t!=='easy')return;const l=getLog(wi,day.d);if(l&&(l.env==='tm'||l.mix))return;const e=efOf(l);if(e)a.push(e)}));return a}
+function cumKm(){let s=0;W.forEach((w,wi)=>w.d.forEach(day=>{const l=getLog(wi,day.d);if(l&&l.km>0)s+=l.km}));return s}
+function nextRace(){const now=new Date();now.setHours(0,0,0,0);let best=null;W.forEach((w,wi)=>w.d.forEach(day=>{if(day.t!=='race')return;const d=dateOf(wi,day.d);d.setHours(0,0,0,0);if(d>=now&&(!best||d<best.d))best={d:d,ti:day.ti}}));return best}
+
+function selWeek(i){selected=i;render()}
+function setHRMode(m){window.__hrMode=m;render()}
+// chip buttons (ใช้ซ้ำได้ทั้ง top nav + ใน section)
+function chipBtns(){
+ const cw=curWeek();let h='';
+ W.forEach((w,i)=>{
+  const dn=wkDone(i),tot=wkTotal(i);
+  const isDoneWk=dn===tot&&tot>0;
+  h+='<button class="wk-btn'+(i===selected?' active':'')+(i===cw?' current':'')+(isDoneWk?' done':'')+'" onclick="selWeek('+i+')">W'+w.w+(isDoneWk?'<span class="wk-dot"></span>':'')+'</button>';
+ });
+ return h;
+}
+function chipBar(label){return '<div class="chip-label">'+label+'</div><div class="week-nav">'+chipBtns()+'</div>'}
+function renderNav(){document.getElementById('wknav').innerHTML=chipBtns()}
+
+function renderHero(){
+ const now=new Date();
+ const today=new Date(now);today.setHours(0,0,0,0);
+ const nx=RACES.find(r=>r.date>=today)||RACES[RACES.length-1];
+ // race assumed at 06:00 local — typical Thai morning race
+ const target=new Date(nx.date);target.setHours(6,0,0,0);
+ const ms=Math.max(0,target-now);
+ const days=Math.floor(ms/864e5);
+ const hours=Math.floor((ms%864e5)/36e5);
+ const mins=Math.floor((ms%36e5)/6e4);
+ const pad=n=>String(n).padStart(2,'0');
+ let dn=0,tot=0;W.forEach((w,wi)=>{dn+=wkDone(wi);tot+=wkTotal(wi)});
+ const cw=Math.max(0,Math.min(curWeek(),W.length-1))+1;
+ const pct=Math.round(dn/tot*100);
+ const el=document.getElementById('hero');
+ el.innerHTML=
+  '<div class="hero-inner">'+
+   '<div class="hero-left">'+
+    '<div class="hero-eyebrow"><span class="pulse-dot"></span>RACE ถัดไป'+(nx.a?' · A-RACE':'')+'</div>'+
+    '<div class="hero-race">'+nx.n+'</div>'+
+    '<div class="hero-meta"><b>'+nx.full+'</b></div>'+
+   '</div>'+
+   '<div class="hero-right">'+
+    '<div class="hero-countdown">'+
+     '<div class="cd-block"><div class="cd-num">'+(heroAnimated?days:0)+'</div><div class="cd-unit">วัน</div></div>'+
+     '<div class="cd-sep">:</div>'+
+     '<div class="cd-block"><div class="cd-num">'+pad(hours)+'</div><div class="cd-unit">ชั่วโมง</div></div>'+
+     '<div class="cd-sep">:</div>'+
+     '<div class="cd-block"><div class="cd-num">'+pad(mins)+'</div><div class="cd-unit">นาที</div></div>'+
+    '</div>'+
+    '<div class="hero-goal">'+nx.goal+'</div>'+
+   '</div>'+
+  '</div>'+
+  '<div class="hero-prog-row">'+
+   '<div class="hero-prog-l">ความคืบหน้าทั้งแผน · W'+cw+' / 30</div>'+
+   '<div class="hero-prog-track"><div class="hero-prog-fill" style="width:'+(heroAnimated?pct:0)+'%"></div></div>'+
+   '<div class="hero-prog-v">'+pct+'%</div>'+
+  '</div>';
+ if(!heroAnimated){            // micro-interaction เฉพาะโหลดแรก
+  heroAnimated=true;
+  const num=el.querySelector('.cd-num'),fill=el.querySelector('.hero-prog-fill'),t0=performance.now();
+  (function step(t){const p=Math.min(1,(t-t0)/750),e=1-Math.pow(1-p,3);num.textContent=Math.round(days*e);if(p<1)requestAnimationFrame(step)})(t0);
+  setTimeout(()=>{fill.style.width=pct+'%'},80);
+ }
+}
+function renderRaces(){
+ const today=new Date();today.setHours(0,0,0,0);
+ const nextI=RACES.findIndex(r=>r.date>=today);
+ let h='';
+ RACES.forEach((r,i)=>{
+  if(i===nextI)return;                                            // ตัวที่ next อยู่ใน hero แล้ว
+  const days=Math.max(0,Math.round((r.date-today)/864e5));
+  h+='<div class="rl-item'+(r.a?' a':'')+'">'+
+   '<div class="rl-l">'+
+    '<div class="rl-name">'+r.short+(r.a?'<span class="rl-tag">🎯 a-race</span>':'')+'</div>'+
+    '<div class="rl-meta">'+r.full+' · '+r.goal+'</div>'+
+   '</div>'+
+   '<div class="rl-cd"><div class="rl-cd-n">'+days+'</div><div class="rl-cd-u">วัน</div></div>'+
+  '</div>';
+ });
+ document.getElementById('races').innerHTML=h?'<div class="race-line">'+h+'</div>':'';
+}
+// avg HR ต่อประเภท session (ทั้งแผน) — แบบ go-sub42
+function hrByType(){
+ const acc={easy:[],quality:[],long:[]};
+ W.forEach((w,wi)=>w.d.forEach(day=>{if(!acc[day.t])return;const l=getLog(wi,day.d);if(l&&l.hr>0)acc[day.t].push(l)}));
+ const out=[];
+ for(const k in acc){const a=acc[k];if(!a.length)continue;
+  const avg=Math.round(a.reduce((s,l)=>s+l.hr,0)/a.length);
+  const mx=a.filter(l=>l.hx>0).map(l=>l.hx);
+  out.push({t:k,avg,max:mx.length?Math.round(Math.max(...mx)):0,n:a.length});
+ }
+ return out;
+}
+function renderProg(){
+ const pb=document.getElementById('progbar');
+ let dn=0,tot=0;W.forEach((w,wi)=>{dn+=wkDone(wi);tot+=wkTotal(wi)});
+ const km=cumKm();
+ const aR=RACES.find(r=>r.a);const t0=new Date();t0.setHours(0,0,0,0);
+ const adays=Math.max(0,Math.round((aR.date-t0)/864e5));   // (เก็บไว้ใช้ในที่อื่น)
+ // monthly mileage (เดือนปัจจุบันจริง)
+ const mNow=new Date(),mIdx=mNow.getMonth(),yIdx=mNow.getFullYear();
+ let mAct=0,mPlan=0;
+ W.forEach((ww,wi)=>ww.d.forEach(day=>{
+  const dt=dateOf(wi,day.d);
+  if(dt.getMonth()===mIdx&&dt.getFullYear()===yIdx){mPlan+=day.k||0;const l=getLog(wi,day.d);if(l&&l.km>0)mAct+=l.km}
+ }));
+ const mPct=mPlan?Math.min(100,Math.round(mAct/mPlan*100)):0;
+ const mColor=mPct>=100?'#52c896':mPct>=70?'#2faa72':mPct>=40?'#f5a623':'#e63012';
+ const mStatus=mAct>=mPlan?'เกินเป้า ✓':'เหลือ '+(mPlan-mAct).toFixed(0)+' km';
+ const ringR=18,ringC=2*Math.PI*ringR,ringOff=ringC*(1-mPct/100);
+ const ef=efSeries();
+ // km logged
+ let h='<div class="prog"><div class="prog-l">ระยะสะสม</div><div class="prog-v" style="color:#2faa72">'+(km?km.toFixed(1):'0')+'</div><div class="prog-u">km บันทึกจริง</div></div>';
+ // sessions
+ h+='<div class="prog"><div class="prog-l">Sessions</div><div class="prog-v">'+dn+'<span style="font-size:13px;color:#888">/'+tot+'</span></div><div class="prog-u">'+Math.round(dn/tot*100)+'% ของทั้งแผน</div></div>';
+ // countdown
+ // monthly mileage tile (แทน A-Race ที่ซ้ำกับ hero)
+ h+='<div class="prog prog-month"><div class="prog-l">'+MONTHS[mIdx]+' '+yIdx+'</div>'+
+  '<div class="prog-month-row">'+
+   '<div class="prog-month-ring"><svg width="42" height="42"><circle cx="21" cy="21" r="'+ringR+'" fill="none" stroke="#f1efe9" stroke-width="4.5"/><circle cx="21" cy="21" r="'+ringR+'" fill="none" stroke="'+mColor+'" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="'+ringC.toFixed(1)+'" stroke-dashoffset="'+ringOff.toFixed(1)+'" transform="rotate(-90 21 21)"/></svg><div class="prog-month-pct">'+mPct+'%</div></div>'+
+   '<div class="prog-month-r"><div class="prog-v" style="font-size:18px">'+mAct.toFixed(1)+'<span style="font-size:11px;color:#888;font-weight:600"> / '+mPlan+'</span></div>'+
+    '<div class="prog-u" style="color:'+mColor+';font-weight:600">'+mStatus+'</div></div>'+
+  '</div></div>';
+ // aerobic efficiency
+ let efv='–',efu='ยังไม่มีข้อมูล Easy run',efarw='';
+ if(ef.length){
+  const latest=ef[ef.length-1];
+  efv=latest.toFixed(2);
+  // band: <0.85 ต่ำ · 0.85-0.95 ดี · >0.95 มาก
+  const band=latest<0.85?'ต่ำกว่าเกณฑ์':latest<0.95?'ในเกณฑ์ดี':'สูง · ฟิต';
+  if(ef.length>1){
+   const prior=ef.slice(0,-1).reduce((a,b)=>a+b,0)/(ef.length-1);
+   const better=latest>prior;
+   efarw='<span class="arw" style="color:'+(better?'#2faa72':'#e63012')+'">'+(better?'▲':'▼')+'</span>';
+   efu=band+' · '+(better?'ดีขึ้น':'แย่ลง')+'จากค่าเฉลี่ย';
+  }else{efu=band+' · baseline ≥ 0.85';}
+ }
+ h+='<div class="prog ef"><div class="prog-l">Aerobic Eff.</div><div class="prog-v" style="color:#3a86c8">'+efv+efarw+'</div><div class="prog-u">'+efu+'</div></div>';
+ pb.innerHTML=h;
+}
+
+function render(){
+ renderHero();
+ renderRaces();
+ renderProg();
+ const w=W[selected],c=document.getElementById('content');
+ const cw=curWeek(),td=cw===selected?curDay():-1;
+ const ws=dateOf(selected,0),we=dateOf(selected,6);
+ const dn=wkDone(selected),tot=wkTotal(selected),pct=tot?Math.round(dn/tot*100):0;
+ const qd=w.d.filter(x=>x.t==='quality').length;
+ const lc=w.ls<45?'#2f9e6a':w.ls<65?'#cf8f00':'#e63012';
+ const lt=w.ls<45?'เบา — Recovery':w.ls<65?'ปานกลาง':'หนัก — Focus';
+ const phc=PHCOLOR[w.p]||'#888';
+
+ let html='<div class="week-hero">'+
+  '<div class="week-eyebrow"><span class="we-w">WEEK '+w.w+'</span> / 30 · <span style="color:'+phc+'">'+w.p+' PHASE</span></div>'+
+  '<div class="week-focus">'+w.f+'</div>'+
+  '<div class="week-dates">'+fmt(ws)+' – '+fmt(we)+' 2026</div>';
+ // phase bar
+ html+='<div class="phase-banner">';
+ W.forEach((ww,i)=>{
+  const d2=wkDone(i),t2=wkTotal(i);
+  const cmp=d2===t2&&t2>0,par=d2>0&&d2<t2;
+  let bg=cmp?'#52c896':par?'#f5a623':i===selected?(PHCOLOR[ww.p]||'#cfccc2'):i<selected?'#cfccc2':'#e6e3da';
+  let op=cmp||par?1:i===selected?1:i<selected?.4:.2;
+  html+='<div class="ph-seg" style="background:'+bg+';opacity:'+op+'"></div>';
+ });
+ html+='</div>';
+ // stats
+ html+='<div class="week-stats">'+
+  '<div class="stat"><div class="stat-l">ระยะทาง</div><div class="stat-v">'+w.k+'</div><div class="stat-u">km / สัปดาห์</div></div>'+
+  '<div class="stat"><div class="stat-l">Training Load</div><div class="load-bar"><div class="track"><div class="fill" style="width:'+Math.min(100,w.ls/90*100)+'%;background:'+lc+'"></div></div><div class="num" style="color:'+lc+'">'+w.ls+'<span style="font-size:9px;color:var(--muted);font-weight:600">/90</span></div></div><div class="stat-u" style="margin-top:4px">'+lt+'</div></div>'+
+  '<div class="stat"><div class="stat-l">Quality</div><div class="stat-v" style="color:'+(qd?'#e63012':'#9a968a')+'">'+(qd||'—')+'</div><div class="stat-u">'+(qd?'days hard work':w.p+' phase')+'</div></div>';
+ const cmin=Math.min(...w.d.map(x=>(CARB[x.ca]||CARB.rest)[0]));
+ const cmax=Math.max(...w.d.map(x=>(CARB[x.ca]||CARB.rest)[1]));
+ html+='<div class="stat"><div class="stat-l">Carb / day</div><div class="stat-v" style="color:#b07700;font-size:16px">'+cmin+'–'+cmax+'g</div><div class="stat-u">low–high</div></div>';
+ html+='</div>';
+ // progress
+ html+='<div class="progress"><div class="progress-top"><span class="progress-l">ความคืบหน้าสัปดาห์นี้</span><span class="progress-v" style="color:'+(pct===100?'#2faa72':'#1c1c1c')+'">'+dn+'/'+tot+' sessions '+(pct===100?'🎉':'')+'</span></div><div class="progress-track"><div class="progress-fill" style="width:'+pct+'%;background:'+(pct===100?'#52c896':pct>=50?'#f5a623':'#e63012')+'"></div></div></div>';
+ html+='</div>';
+
+ // days
+ html+=chipBar('เลือกสัปดาห์')+'<div class="section-l">ตารางซ้อมสัปดาห์นี้</div>';
+ html+='<div class="type-legend">'+['easy','quality','long','cross','rest'].map(t=>{const s=SESS[t];return '<span class="tl-chip" style="color:'+s.tc+';background:'+s.bg+'">'+s.l+'</span>'}).join('')+'</div>';
+ html+='<div class="sched-wrap"><table class="sched"><thead><tr><th>วัน</th><th>รายการซ้อม</th><th>แผน</th><th>เพซเป้าหมาย</th><th>ผลลัพธ์ · Strava</th></tr></thead><tbody>';
+ w.d.forEach(day=>{
+  const st=SESS[day.t]||SESS.rest;
+  const dt=dateOf(selected,day.d);
+  const tdy=td===day.d;
+  const dn2=isDone(selected,day.d);
+  const isR=day.t==='rest';
+  const showDone=dn2&&!isR;        // rest day ที่มี activity (badminton) ไม่โชว์ DONE
+  const lg=getLog(selected,day.d);
+  const rcls=isR?'rest':showDone?'done':tdy?'today':'';
+  html+='<tr class="'+rcls+'">';
+  // col วัน
+  html+='<td class="s-day" style="border-left-color:'+st.c+'">'+DAYS[day.d]+(tdy&&!dn2?'<span class="s-today-tag">TODAY</span>':'')+'<span class="s-dt">'+fmt(dt)+'</span></td>';
+  // col รายการซ้อม
+  html+='<td><span class="s-chip" style="color:'+(showDone?'#2faa72':st.tc)+';background:'+(showDone?'#eaf7f0':st.bg)+'">'+(showDone?'✓ '+st.l:st.l)+'</span><div class="s-ti">'+day.ti+'</div>';
+  if(day.de)html+='<div class="s-de">'+day.de+'</div>';
+  if(day.al)html+='<div class="s-alt">⚡ '+day.al+'</div>';
+  html+='</td>';
+  // col แผน
+  const plan=[];if(day.k)plan.push(day.k+' km');if(day.m)plan.push(day.m+'′');
+  html+='<td class="s-plan">'+(isR?'พัก':(plan.join(' · ')||'—'))+'</td>';
+  // col เพซเป้าหมาย
+  html+='<td class="s-plan" style="color:'+(isR?'#aaa69a':st.tc)+'">'+(TPACE[day.t]||'—')+'</td>';
+  // col ผลลัพธ์ (Strava actual)
+  html+='<td class="s-res">';
+  if(lg&&lg.km>0){
+   html+=lg.km+' km';
+   if(lg.min>0){const ps=lg.min*60/lg.km;html+=' · '+Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0')+'/km';}
+   if(lg.hr>0)html+=' · HR '+Math.round(lg.hr);
+   if(lg.env==='tm')html+=' <span class="tm">🏠</span>';
+   const e=efOf(lg);
+   if(e&&day.t==='easy'&&lg.env!=='tm'&&!lg.mix)html+='<span class="s-ef">EF '+e.toFixed(2)+'</span>';
+  }else if(showDone){html+='<span style="color:#2faa72">✓ เสร็จ</span>';}
+  else{html+='<span class="s-none">—</span>';}
+  html+='</td></tr>';
+ });
+ html+='</tbody></table></div>';
+
+ // สรุปการซ้อมสัปดาห์นี้ — chart (plan vs actual) + log cards
+ const doneRuns=w.d.filter(day=>{const l=getLog(selected,day.d);return l&&l.km>0});
+ html+=chipBar('เลือกสัปดาห์')+'<div class="section-l">สรุปการซ้อมสัปดาห์นี้</div>';
+
+ // chart — plan ghost bar (เทาจาง) + actual bar (สี) ซ้อนกัน · hover tooltip
+ const actual=w.d.map(day=>{const l=getLog(selected,day.d);return l&&l.km>0?l.km:0});
+ const planned=w.d.map(day=>day.k||0);
+ const maxD=Math.max(1,...actual,...planned);
+ html+='<div class="dist-chart">';
+ w.d.forEach((day,i)=>{
+  const st=SESS[day.t]||SESS.rest;const av=actual[i];const pv=planned[i];
+  const showV=av>0?av:(pv>0?pv:'');
+  const valColor=av>0?'#1c1c1c':'#9a968a';
+  const dt=dateOf(selected,day.d);const lg=getLog(selected,day.d);
+  // tooltip content
+  let tip='<div class="dc-tip-title">'+DAYS[day.d]+' '+fmt(dt)+' · '+st.l+'</div>';
+  if(day.t==='rest'){tip+='<div class="dc-tip-row"><span>'+day.ti+'</span></div>';}
+  else{
+   tip+='<div class="dc-tip-row"><span>Plan</span><b>'+(pv?pv+' km':'—')+(day.m?' · '+day.m+'′':'')+'</b></div>';
+   if(lg&&lg.km>0){
+    const ps=lg.min*60/lg.km;const pace=Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0');
+    tip+='<div class="dc-tip-row"><span>Actual</span><b>'+lg.km+' km · '+pace+'/km</b></div>';
+    if(lg.hr>0)tip+='<div class="dc-tip-row"><span>HR</span><b>'+Math.round(lg.hr)+(lg.hx>0?' / '+Math.round(lg.hx):'')+'</b></div>';
+    if(pv>0){const d=lg.km-pv;const pct=Math.round(d/pv*100);
+     tip+='<div class="dc-tip-delta '+(d>=0?'hit':'short')+'">'+(d>=0?'+':'')+d.toFixed(1)+' km ('+(pct>=0?'+':'')+pct+'%) vs plan</div>';
+    }
+   }else{tip+='<div class="dc-tip-row"><span>Actual</span><b style="color:#a8a8a0">— ยังไม่วิ่ง</b></div>';}
+  }
+  html+='<div class="dc-col"><div class="dc-tip">'+tip+'</div><div class="dc-km" style="color:'+valColor+'">'+showV+'</div>'+
+   '<div class="dc-track">'+
+    (pv>0?'<div class="dc-ghost" style="height:'+(pv/maxD*100)+'%"></div>':'')+
+    (av>0?'<div class="dc-bar" style="height:'+(av/maxD*100)+'%;background:'+st.c+'"></div>':'')+
+   '</div><div class="dc-d">'+DAYS[day.d]+'</div></div>';
+ });
+ html+='</div>';
+ html+='<div class="chart-legend"><span><i class="lg-ghost"></i>แผน</span><span><i class="lg-actual"></i>วิ่งจริง</span><span style="color:var(--faint)">· hover ดูรายละเอียด</span></div>';
+
+ // log cards — เฉพาะวันที่วิ่งแล้ว
+ if(doneRuns.length){
+  html+='<div class="log-list">';
+  doneRuns.forEach(day=>{
+   const l=getLog(selected,day.d);const dt=dateOf(selected,day.d);
+   const t=l.type||day.t;const s=SESS[t]||SESS.easy;
+   const ps=l.min>0?l.min*60/l.km:0;
+   const pace=ps?Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0'):'';
+   html+='<div class="log-item"><div class="log-date"><span class="ld-num">'+dt.getDate()+'</span><span class="ld-mo">'+MONTHS[dt.getMonth()]+'</span></div>';
+   html+='<div class="log-body"><div class="log-head"><div class="log-title">'+day.ti+' <span class="log-tw">W'+w.w+' '+DAYS[day.d]+'</span></div>';
+   if(l.rpe)html+='<div class="log-rpe">'+l.rpe+'/10<span>RPE</span></div>';
+   html+='</div>';
+   html+='<span class="s-chip" style="color:'+s.tc+';background:'+s.bg+'">'+s.l+'</span>';
+   html+='<div class="log-badges">';
+   html+='<span class="lb lb-km">📍 '+l.km+' กม.</span>';
+   if(pace)html+='<span class="lb lb-pace">⚡ '+pace+'/กม.</span>';
+   if(l.hr>0)html+='<span class="lb lb-hr">❤️ HR '+Math.round(l.hr)+(l.hx>0?'/'+Math.round(l.hx):'')+'</span>';
+   if(l.cad>0)html+='<span class="lb">👣 '+l.cad+'</span>';
+   if(l.te)html+='<span class="lb lb-te">📈 TE '+l.te+'</span>';
+   const e=efOf(l);if(e&&t==='easy'&&l.env!=='tm'&&!l.mix)html+='<span class="lb lb-ef">EF '+e.toFixed(2)+'</span>';
+   if(l.env==='tm')html+='<span class="lb lb-tm">🏠 treadmill</span>';
+   html+='</div>';
+   if(l.note)html+='<div class="log-note">'+l.note+'</div>';
+   html+='</div></div>';
+  });
+  html+='</div>';
+ }
+
+ // กราฟ HR รายสัปดาห์ — line chart · 2 เส้น (avg + max) · มี filter chip
+ const hrMode=window.__hrMode||'easy';   // 'easy' | 'all'
+ const wk=[];W.forEach((ww,wi)=>{const hrs=[],mxs=[];ww.d.forEach(day=>{const l=getLog(wi,day.d);if(!l||!(l.hr>0))return;const t=l.type||day.t;if(hrMode==='easy'&&t!=='easy')return;if(hrMode==='all'&&!['easy','quality','long'].includes(t))return;hrs.push(l.hr);if(l.hx)mxs.push(l.hx)});if(hrs.length)wk.push({w:wi+1,hr:Math.round(hrs.reduce((s,x)=>s+x,0)/hrs.length),hx:mxs.length?Math.round(Math.max(...mxs)):0})});
+ if(wk.length){
+  html+='<div class="section-l">HR รายสัปดาห์</div>';
+  html+='<div class="hr-tabs">'+
+   '<button class="hr-tab'+(hrMode==='easy'?' active':'')+'" onclick="setHRMode(\'easy\')">Easy เท่านั้น</button>'+
+   '<button class="hr-tab'+(hrMode==='all'?' active':'')+'" onclick="setHRMode(\'all\')">ทุก run</button>'+
+   '</div>';
+  const VW=600,VH=210,pL=32,pR=10,pT=18,pB=28,pw=VW-pL-pR,ph=VH-pT-pB,yMin=120,yMax=195;
+  const ym=v=>(pT+ph*(1-(v-yMin)/(yMax-yMin)));
+  const n=wk.length,slot=n>1?pw/(n-1):0,xc=i=>n>1?pL+slot*i:pL+pw/2;
+  let s='<div class="hr-svg-wrap"><svg viewBox="0 0 '+VW+' '+VH+'" class="hr-svg">';
+  [130,150,170,190].forEach(g=>{s+='<line x1="'+pL+'" y1="'+ym(g).toFixed(1)+'" x2="'+(VW-pR)+'" y2="'+ym(g).toFixed(1)+'" class="hr-grid"/><text x="'+(pL-5)+'" y="'+(ym(g)+3).toFixed(1)+'" class="hr-axis" text-anchor="end">'+g+'</text>'});
+  // เส้น max (terracotta) — เฉพาะจุดที่มี hx
+  const mxPts=wk.map((p,i)=>p.hx>0?{x:xc(i),y:ym(p.hx),v:p.hx}:null).filter(Boolean);
+  if(mxPts.length>1){const mp=mxPts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');s+='<path d="'+mp+'" fill="none" stroke="#b9786a" stroke-width="2" stroke-linejoin="round"/>'}
+  mxPts.forEach(p=>{s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4" fill="#b9786a"/>';s+='<text x="'+p.x.toFixed(1)+'" y="'+(p.y-10).toFixed(1)+'" class="hr-axis-bold" text-anchor="middle" style="fill:#b9786a">'+p.v+'</text>'});
+  // เส้น avg (เขียว)
+  const avgPts=wk.map((p,i)=>({x:xc(i),y:ym(p.hr),v:p.hr}));
+  if(avgPts.length>1){const ap=avgPts.map((p,i)=>(i?'L':'M')+p.x.toFixed(1)+' '+p.y.toFixed(1)).join(' ');s+='<path d="'+ap+'" fill="none" stroke="#2faa72" stroke-width="2.5" stroke-linejoin="round"/>'}
+  avgPts.forEach(p=>{s+='<circle cx="'+p.x.toFixed(1)+'" cy="'+p.y.toFixed(1)+'" r="4.5" fill="#2faa72"/>';s+='<text x="'+p.x.toFixed(1)+'" y="'+(p.y+19).toFixed(1)+'" class="hr-axis-bold" text-anchor="middle" style="fill:#2faa72">'+p.v+'</text>'});
+  // x-axis labels (bigger)
+  wk.forEach((p,i)=>{s+='<text x="'+xc(i).toFixed(1)+'" y="'+(VH-pB+15)+'" class="hr-axis-bold" text-anchor="middle">W'+p.w+'</text>'});
+  s+='</svg></div><div class="hr-leg">';
+  s+='<span class="hr-lg"><span class="hr-lgd" style="background:#2faa72"></span>avg</span>';
+  s+='<span class="hr-lg"><span class="hr-lgd" style="background:#b9786a"></span>max</span></div>';
+  html+=s;
+ }
+
+ // อ้างอิง — Pace + Carb รวมใต้ section เดียว แต่คนละแถว
+ // (คนละหน่วย: pace = ความเร็ว/โซน · carb = คาร์บ/วันซ้อม → ยุบเป็นตารางเดียวไม่ได้ เพราะแกนไม่ตรงกัน)
+ html+='<div class="section-l">อ้างอิง</div>';
+ html+='<div class="ref-sub">Pace · VDOT 40→43 <i>นาที/กม.</i></div><div class="ref-row">';
+ [['E','#2f9e6a','6:35–7:00'],['M','#3a86c8','5:41'],['T','#f5a623','5:30'],['I','#e63012','5:05'],['R','#9a968a','4:50']].forEach(p=>{
+  html+='<span class="ref-pill"><span class="ref-dot" style="background:'+p[1]+'"></span><b>'+p[0]+'</b> '+p[2]+'</span>';
+ });
+ html+='</div>';
+ html+='<div class="ref-sub">Carb · 60 kg <i>กรัม/วัน</i></div><div class="ref-row">';
+ [['พัก',CARB.rest,'var(--muted)'],['Easy',CARB.easy,'#2f9e6a'],['Quality',CARB.quality,'#e63012'],['Long',CARB.long,'#3a86c8'],['Race',CARB.race,'#b07700']].forEach(c=>{
+  html+='<span class="ref-pill"><span class="ref-dot" style="background:'+c[2]+'"></span><b>'+c[0]+'</b> '+c[1][0]+'–'+c[1][1]+'g</span>';
+ });
+ html+='</div>';
+
+ // ท่าเวทประจำสัปดาห์ — แสดงเฉพาะถ้าสัปดาห์นี้มี weights day
+ const hasWeights=w.d.some(day=>day.t==='cross'&&/weight/i.test(day.ti));
+ if(hasWeights){
+  // RPE/intensity จาก plan title
+  const wDay=w.d.find(day=>day.t==='cross'&&/weight/i.test(day.ti));
+  const isLight=/light|เบา|-\d+%/i.test(wDay.ti+' '+(wDay.de||''));
+  html+='<div class="section-l">ท่าเวทประจำสัปดาห์</div>';
+  html+='<div class="weights-card">';
+  WEIGHTS_ROUTINE.forEach(grp=>{
+   html+='<div class="weights-grp"><div class="weights-grp-l">'+grp.l+'</div>';
+   grp.items.forEach(it=>{html+='<div class="weights-row"><b>'+it[0]+'</b><span>'+it[1]+'</span></div>'});
+   html+='</div>';
+  });
+  html+='<div class="weights-note">'+(isLight?'🟡 Deload week — ลด volume 30% (set น้อยลง หรือ weight เบาลง)':'RPE 7 · compound หนักก่อน → accessory + glute med → plyo ปิดท้าย')+'</div>';
+  html+='</div>';
+ }
+
+ c.innerHTML=html;
+}
+
+function exportICS(){
+ let lines=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Marathon Sub-4 Plan//TH','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
+ W.forEach((w,wi)=>w.d.forEach(day=>{
+  if(day.t==='rest')return;
+  const d=dateOf(wi,day.d);
+  const ymd=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  const cb=CARB[day.ca]||CARB.rest;
+  const desc=[day.de,day.al?'Optional: '+day.al:'','Carb: '+cb[0]+'-'+cb[1]+'g'].filter(Boolean).join('\\n');
+  lines.push('BEGIN:VEVENT','UID:mp-w'+wi+'-d'+day.d+'@training','DTSTART;VALUE=DATE:'+ymd,'DTEND;VALUE=DATE:'+ymd,'SUMMARY:'+day.ti,'DESCRIPTION:'+desc,'CATEGORIES:TRAINING','STATUS:CONFIRMED','END:VEVENT');
+ }));
+ lines.push('END:VCALENDAR');
+ const blob=new Blob([lines.join('\r\n')],{type:'text/calendar;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');a.href=url;a.download='Marathon-Sub4-Plan.ics';a.click();
+ URL.revokeObjectURL(url);
+}
+
+render();
+</script>
+</body>
+</html>
