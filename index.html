@@ -45,8 +45,8 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .day-log .la{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 .day-log .tm{color:var(--muted);font-weight:500}
 .day-log .ef{margin-left:auto;font-size:10px;font-weight:700;color:#3a86c8;background:#e8f2fb;border:1px solid #bfdcf3;border-radius:2px;padding:3px 7px}
-.sched-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.sched{width:100%;border-collapse:collapse;margin-top:2px;font-size:12px}
+.sched-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:1px solid var(--line);border-radius:12px;padding:4px 8px;box-shadow:0 1px 2px rgba(0,0,0,.03);margin-top:2px}
+.sched{width:100%;border-collapse:collapse;font-size:12px}
 .sched th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:6px 8px;border-bottom:1px solid #e3e0d7;white-space:nowrap}
 .sched td{padding:9px 8px;border-bottom:1px solid #eceae2;vertical-align:top}
 .sched tr:last-child td{border-bottom:none}
@@ -206,8 +206,9 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .rl-cd{text-align:right;line-height:1;font-variant-numeric:tabular-nums}
 .rl-cd-n{font-size:20px;font-weight:800;color:var(--ink)}
 .rl-cd-u{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
-/* week-nav as chips */
+/* week-nav as chips · sticky single nav */
 .week-nav{border-bottom:none;gap:6px;padding:16px 0 6px}
+.chip-label + .week-nav{position:sticky;top:0;background:var(--bg);z-index:20;padding-top:8px;padding-bottom:8px;margin:0 -4px;padding-left:4px;padding-right:4px}
 .wk-btn{border:1px solid #e3e0d7;background:#fff;border-radius:16px;padding:6px 13px;margin-bottom:0;color:var(--muted)}
 .wk-btn:hover{border-color:#9a968a;color:#1c1c1c}
 .wk-btn.current:not(.active){border-color:#f5a623;color:#b07700}
@@ -247,7 +248,8 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .log-title{flex:1;font-size:15px;font-weight:700;color:var(--ink);line-height:1.3}
 .log-tw{font-size:11px;font-weight:600;color:var(--muted)}
 .log-rpe{flex-shrink:0;text-align:right;font-size:20px;font-weight:800;color:var(--gold);line-height:1}
-.log-rpe span{display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--muted);margin-top:2px}
+.log-rpe>span{display:block;font-size:9px;font-weight:700;letter-spacing:.1em;color:var(--muted);margin-top:2px;display:flex;align-items:center;justify-content:flex-end;gap:2px}
+.log-rpe .tip-i{margin-left:2px}
 .log-item .s-chip{display:inline-block;margin:7px 0 0}
 .log-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
 .lb{font-size:11px;font-weight:600;padding:4px 10px;border-radius:16px;background:#f1efe9;color:var(--ink-2);white-space:nowrap}
@@ -259,6 +261,18 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .lb-tm{background:#fdf6e3;color:#9a6b00}
 .log-note{font-size:12px;color:var(--ink-2);line-height:1.55;margin-top:10px}
 .log-empty{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #ddd9cf;border-radius:16px;padding:18px;text-align:center}
+/* 🎯 Snapshot · From start — Peak-End close + journey context */
+.snap-card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 18px;box-shadow:0 1px 2px rgba(0,0,0,.03);margin-top:8px}
+.snap-lead{font-size:13px;line-height:1.65;color:var(--ink-2);padding-bottom:14px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.snap-lead b{color:var(--ink);font-weight:600}
+.snap-lead .phase-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:10px;background:#eaf7f0;color:#2f9e6a;margin:0 2px;vertical-align:1px}
+.snap-row{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;border-bottom:1px dashed #eceae2;font-size:13px}
+.snap-row:last-child{border-bottom:none}
+.snap-l{color:var(--ink-2);font-weight:500}
+.snap-v{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;font-size:15px}
+.snap-v .snap-sub{font-size:11px;font-weight:500;color:var(--muted);margin-left:6px}
+.snap-row.snap-fwd .snap-v{color:#b07700}                     /* milestone — gold accent */
+.snap-row.snap-fwd .snap-l{color:var(--ink-2);font-weight:600}
 /* week selector label */
 .chip-label{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:24px;margin-bottom:4px}
 .chip-label + .week-nav{padding-top:0}
@@ -273,6 +287,14 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .hr-tab{font-family:inherit;font-size:11px;font-weight:600;padding:6px 14px;border-radius:16px;border:1px solid var(--line);background:#fff;color:var(--muted);cursor:pointer;transition:all .15s}
 .hr-tab:hover{border-color:#9a968a;color:var(--ink)}
 .hr-tab.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+/* jargon tooltip — info icon for casual viewers */
+.tip{position:relative;display:inline-flex;align-items:center;cursor:help}
+.tip-i{display:inline-flex;align-items:center;justify-content:center;width:13px;height:13px;border-radius:50%;background:#cfccc2;color:#fff;font-size:9px;font-weight:700;font-style:normal;margin-left:4px;line-height:1;flex-shrink:0}
+.tip-i:hover{background:#9a968a}
+.tip-body{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:8px 10px;border-radius:6px;font-size:11px;font-weight:500;line-height:1.5;white-space:normal;width:200px;opacity:0;pointer-events:none;transition:opacity .15s;z-index:30;box-shadow:0 4px 14px rgba(0,0,0,.18);text-align:left;letter-spacing:0;text-transform:none}
+.tip-body::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a1a}
+.tip:hover .tip-body{opacity:1}
+.tip-body b{color:#d4f54a;font-weight:600}
 /* dist chart tooltip */
 .dc-col{position:relative;cursor:pointer}
 .dc-tip{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.5;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .15s;z-index:10;box-shadow:0 6px 18px rgba(0,0,0,.18);min-width:180px;text-align:left}
@@ -380,12 +402,12 @@ const W=[
  {d:5,t:'long',k:12,m:75,ti:'Long Run 75 นาที (deload)',de:'6:30/km เบามาก',ca:'long'},
  {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
 ]},
-{w:5,p:'Base',f:'Push base — เพิ่ม strides 6',k:40,ls:43,d:[
+{w:5,p:'Base',f:'Push base — เพิ่ม strides 6 · Thu↔Fri swap (Fri rest pre-long)',k:38,ls:43,d:[
  {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'Full body',ca:'rest'},
  {d:1,t:'easy',k:9,m:58,ti:'Easy 55 นาที + 6 Strides',de:'6:20/km + strides 100m ×6',al:'45 นาที + 4 strides',ca:'easy'},
  {d:2,t:'easy',k:8,m:50,ti:'Easy 50 นาที',de:'6:25/km',al:'40 นาที',ca:'easy'},
- {d:3,t:'rest',k:0,m:0,ti:'พัก',de:'',ca:'rest'},
- {d:4,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
+ {d:3,t:'easy',k:4,m:25,ti:'Easy 25 นาที shakeout (swap จาก Fri)',de:'6:30+/km · L1 ห้ามต่ำกว่า 6:30 · HR cap 160 · pre-fuel',al:'พัก ถ้าขาหนัก',ca:'easy'},
+ {d:4,t:'rest',k:0,m:0,ti:'พัก (pre-long taper)',de:'24 ชม. ก่อน Sat long = full rest',ca:'rest'},
  {d:5,t:'long',k:17,m:108,ti:'Long Run 105 นาที',de:'6:20/km',ca:'long'},
  {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
 ]},
@@ -641,14 +663,14 @@ const SEED=/*SEED:START*/{
  'w1d1':{km:6.23,min:45.47,hr:161.05,hx:174,cad:173,mix:1},'w1d2':{km:6.66,min:46.47,hr:168,hx:182,cad:173,type:"easy",note:"easy effort จริง แม้ heat 31°C"},'w1d3':{km:10.05,min:61.03,hr:162.5,hx:195,cad:160,mix:1},'w1d6':{km:16.57,min:109.45,hr:170.4,hx:182,cad:176,type:"long",te:4.5,note:"Breakthrough — ระยะ+pace ดีขึ้น HR เท่าเดิม, decoupling หาย"},
  'w2d1':{km:5.34,min:37.78,hr:158.1,hx:179,cad:169},'w2d2':{km:5.44,min:34.13,hr:163.51,hx:193,cad:170,mix:1,type:"quality",rpe:8,te:3.1,note:"Intervals 3×4min ครบ แต่ overpace (วิ่ง I แทน T) · max HR 193"},'w2d4':{km:6,min:36.92,hr:154.5,hx:164,cad:183,env:"tm",type:"easy",rpe:2,note:"Treadmill · cadence 182 breakthrough · feel Very Strong"},'w2d5':{km:18.12,min:128.57,hr:173.9,hx:185,cad:170,type:"long",te:4.6,note:"18km milestone แต่ HR เกิน cap · fatigue carry + shoe issue"},
  'w3d1':{km:6.16,min:35.15,hr:162.8,hx:170,cad:180,env:"tm",type:"easy",note:"Treadmill incline 2.5% · easy baseline ติดแน่น"},'w3d2':{km:4.22,min:28.28,hr:159.7,hx:180,cad:170,mix:1,type:"easy",note:"Easy + 5 strides · cadence ramp 184→193"},'w3d5':{km:9.79,min:67.87,hr:158.15,hx:175,cad:171,mix:1,type:"long",note:"Easy long split 2 รอบ · recovery > long-run adaptation"},
- 'w4d1':{km:11.26,min:77.2,hr:166.76,hx:182,cad:172,mix:1,type:"quality",rpe:7,note:"10K under-fueled (ไม่ได้กินก่อนซ้อม) · HR drift +17 = lactate accumulate ก่อน aerobic ceiling · max HR 179 = ไม่ redline"}
+ 'w4d1':{km:11.26,min:77.2,hr:166.76,hx:182,cad:172,mix:1,type:"quality",rpe:7,note:"10K under-fueled (ไม่ได้กินก่อนซ้อม) · HR drift +17 = lactate accumulate ก่อน aerobic ceiling · max HR 179 = ไม่ redline"},'w4d2':{km:8.16,min:54.47,hr:165.6,hx:178,cad:170,type:"easy",rpe:5,note:"fueled+fresh แต่ dc 10.4% · L1 6:14 เร็วกว่า target 11s = ออกเร็ว + heat drift"}
 }/*SEED:END*/;
 const DONESEED=/*DONE:START*/{
  'w0d1':1,'w0d2':1,'w0d5':1,'w0d6':1,
  'w1d0':1,'w1d1':1,'w1d2':1,'w1d3':1,'w1d6':1,
  'w2d0':1,'w2d1':1,'w2d2':1,'w2d4':1,'w2d5':1,
  'w3d0':1,'w3d1':1,'w3d2':1,'w3d5':1,'w3d6':1,
- 'w4d0':1,'w4d1':1
+ 'w4d0':1,'w4d1':1,'w4d2':1
 }/*DONE:END*/;
 // data = Strava-generated SEED/DONESEED เท่านั้น (read-only dashboard · ไม่อ่าน/เขียน localStorage)
 let log=JSON.parse(JSON.stringify(SEED));
@@ -785,21 +807,26 @@ function renderProg(){
    '<div class="prog-month-r"><div class="prog-v" style="font-size:18px">'+mAct.toFixed(1)+'<span style="font-size:11px;color:#888;font-weight:600"> / '+mPlan+'</span></div>'+
     '<div class="prog-u" style="color:'+mColor+';font-weight:600">'+mStatus+'</div></div>'+
   '</div></div>';
- // aerobic efficiency
+ // aerobic efficiency · เทียบ rolling 3 ก่อนหน้า (ไม่ใช่ all-time avg = ลด outlier noise)
  let efv='–',efu='ยังไม่มีข้อมูล Easy run',efarw='';
  if(ef.length){
   const latest=ef[ef.length-1];
   efv=latest.toFixed(2);
   // band: <0.85 ต่ำ · 0.85-0.95 ดี · >0.95 มาก
-  const band=latest<0.85?'ต่ำกว่าเกณฑ์':latest<0.95?'ในเกณฑ์ดี':'สูง · ฟิต';
+  const band=latest<0.85?'ต่ำกว่าเกณฑ์':latest<0.95?'Base ติดแล้ว ✅':'สูง · ฟิตจัด';
   if(ef.length>1){
-   const prior=ef.slice(0,-1).reduce((a,b)=>a+b,0)/(ef.length-1);
-   const better=latest>prior;
-   efarw='<span class="arw" style="color:'+(better?'#2faa72':'#e63012')+'">'+(better?'▲':'▼')+'</span>';
-   efu=band+' · '+(better?'ดีขึ้น':'แย่ลง')+'จากค่าเฉลี่ย';
+   // rolling: 3 runs ก่อน (ตัดตัว latest ออก)
+   const window=ef.slice(Math.max(0,ef.length-4),ef.length-1);
+   const prior=window.reduce((a,b)=>a+b,0)/window.length;
+   const delta=latest-prior;
+   const better=delta>0.005;       // threshold เล็กน้อย (กัน noise)
+   const worse=delta<-0.005;
+   efarw=better?'<span class="arw" style="color:#2faa72">▲</span>':worse?'<span class="arw" style="color:#e63012">▼</span>':'';
+   const trendL=better?'ดีกว่า':worse?'ต่ำกว่า':'เท่ากับ';
+   efu=band+' · '+trendL+' '+window.length+' run ก่อน ('+prior.toFixed(2)+')';
   }else{efu=band+' · baseline ≥ 0.85';}
  }
- h+='<div class="prog ef"><div class="prog-l">Aerobic Eff.</div><div class="prog-v" style="color:#3a86c8">'+efv+efarw+'</div><div class="prog-u">'+efu+'</div></div>';
+ h+='<div class="prog ef"><div class="prog-l tip">Aerobic Eff.<i class="tip-i">i</i><span class="tip-body"><b>EF (Aerobic Efficiency)</b> = pace ÷ HR · สูงขึ้น = วิ่งเร็วขึ้นที่หัวใจทำงานเท่าเดิม · <b>0.85+</b> = base aerobic ติดแล้ว</span></div><div class="prog-v" style="color:#3a86c8">'+efv+efarw+'</div><div class="prog-u">'+efu+'</div></div>';
  pb.innerHTML=h;
 }
 
@@ -886,7 +913,7 @@ function render(){
 
  // สรุปการซ้อมสัปดาห์นี้ — chart (plan vs actual) + log cards
  const doneRuns=w.d.filter(day=>{const l=getLog(selected,day.d);return l&&l.km>0});
- html+=chipBar('เลือกสัปดาห์')+'<div class="section-l">สรุปการซ้อมสัปดาห์นี้</div>';
+ html+='<div class="section-l">สรุปการซ้อมสัปดาห์นี้</div>';
 
  // chart — plan ghost bar (เทาจาง) + actual bar (สี) ซ้อนกัน · hover tooltip
  const actual=w.d.map(day=>{const l=getLog(selected,day.d);return l&&l.km>0?l.km:0});
@@ -931,15 +958,16 @@ function render(){
    const pace=ps?Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0'):'';
    html+='<div class="log-item"><div class="log-date"><span class="ld-num">'+dt.getDate()+'</span><span class="ld-mo">'+MONTHS[dt.getMonth()]+'</span></div>';
    html+='<div class="log-body"><div class="log-head"><div class="log-title">'+day.ti+' <span class="log-tw">W'+w.w+' '+DAYS[day.d]+'</span></div>';
-   if(l.rpe)html+='<div class="log-rpe">'+l.rpe+'/10<span>RPE</span></div>';
+   if(l.rpe)html+='<div class="log-rpe tip">'+l.rpe+'/10<span>RPE<i class="tip-i">i</i><span class="tip-body"><b>RPE</b> (Rate of Perceived Exertion) · 1=สบายมาก, 10=ตายแน่ · ปอม subjective rate effort หลังวิ่ง</span></span></div>';
    html+='</div>';
    html+='<span class="s-chip" style="color:'+s.tc+';background:'+s.bg+'">'+s.l+'</span>';
    html+='<div class="log-badges">';
    html+='<span class="lb lb-km">📍 '+l.km+' กม.</span>';
    if(pace)html+='<span class="lb lb-pace">⚡ '+pace+'/กม.</span>';
    if(l.hr>0)html+='<span class="lb lb-hr">❤️ HR '+Math.round(l.hr)+(l.hx>0?'/'+Math.round(l.hx):'')+'</span>';
-   if(l.cad>0)html+='<span class="lb">👣 '+l.cad+'</span>';
-   if(l.te)html+='<span class="lb lb-te">📈 TE '+l.te+'</span>';
+   if(l.cad>0)html+='<span class="lb tip">👣 '+l.cad+'<span class="tip-body"><b>Cadence</b> = ก้าว/นาที · target <b>170+</b> ลด impact, efficient stride</span></span>';
+   if(l.te)html+='<span class="lb lb-te tip">📈 TE '+l.te+'<span class="tip-body"><b>Training Effect</b> (Garmin) · 1-5 · บอกว่า run นี้กระตุ้น aerobic ระดับไหน · 3-4 = optimal stimulus</span></span>';
+   if(l.dc)html+='<span class="lb lb-hr tip">📊 dc '+l.dc+'%<span class="tip-body"><b>Decoupling</b> (Pa:HR) · &lt;5% = aerobic base ติด · &gt;10% = base ไม่พอ / overpace / under-fueled</span></span>';
    const e=efOf(l);if(e&&t==='easy'&&l.env!=='tm'&&!l.mix)html+='<span class="lb lb-ef">EF '+e.toFixed(2)+'</span>';
    if(l.env==='tm')html+='<span class="lb lb-tm">🏠 treadmill</span>';
    html+='</div>';
@@ -978,6 +1006,37 @@ function render(){
   s+='<span class="hr-lg"><span class="hr-lgd" style="background:#b9786a"></span>max</span></div>';
   html+=s;
  }
+
+ // 🎯 From start — journey context + Peak-End close
+ const totalKm=cumKm();
+ // streak: longest consecutive-week run streak ending at or before current week
+ let _streak=0;
+ for(let wi=Math.min(cw,W.length-1); wi>=0; wi--){
+  const hasRun=W[wi].d.some(day=>{const l=getLog(wi,day.d);return l&&l.km>0});
+  if(hasRun)_streak++;else break;
+ }
+ // longest single run
+ let _long={km:0,w:0};
+ W.forEach((ww,wi)=>ww.d.forEach(day=>{const l=getLog(wi,day.d);if(l&&l.km>_long.km)_long={km:l.km,w:ww.w}}));
+ // baseline cadence (easy outdoor only)
+ const _cads=[];
+ W.forEach((ww,wi)=>ww.d.forEach(day=>{if(day.t!=='easy')return;const l=getLog(wi,day.d);if(l&&l.cad>0&&l.env!=='tm'&&!l.mix)_cads.push(l.cad)}));
+ const _cadAvg=_cads.length?Math.round(_cads.reduce((a,b)=>a+b,0)/_cads.length):0;
+ // next km milestone (round up to nice number)
+ const _milestones=[25,50,75,100,150,200,250,300,400,500,600,750,1000];
+ const _nextMs=_milestones.find(m=>m>totalKm)||Math.ceil(totalKm/100)*100+100;
+ // phase description for lead text
+ const _ph=W[cw].p;
+ const _phDesc={Base:'สร้าง aerobic base',Threshold:'เพิ่ม T-pace tolerance','10K-Peak':'peak 10K speed',Recovery:'ฟื้น + adapt','M-Build':'สร้าง marathon endurance','M-Peak':'peak marathon fitness',Taper:'taper ก่อน race'}[_ph]||_ph;
+
+ html+='<div class="section-l">🎯 From start</div>';
+ html+='<div class="snap-card">';
+ html+='<div class="snap-lead">ปอมกำลังเทรน <b>Sub-4</b> (วิ่งมาราธอน 42K ใน &lt; 4 ชม.) ที่ <b>ATM Bangkok</b> · ตอนนี้อยู่ <span class="phase-tag">'+_ph+'</span> ('+_phDesc+') สัปดาห์ <b>'+(cw+1)+'/30</b></div>';
+ if(_streak>0)html+='<div class="snap-row"><span class="snap-l">สัปดาห์ติดต่อกัน</span><span class="snap-v">'+_streak+' weeks 🔥</span></div>';
+ if(_long.km>0)html+='<div class="snap-row"><span class="snap-l">Longest run</span><span class="snap-v">'+_long.km+' <span class="snap-sub">km (W'+_long.w+')</span></span></div>';
+ if(_cadAvg)html+='<div class="snap-row"><span class="snap-l">Cadence baseline</span><span class="snap-v">'+_cadAvg+' <span class="snap-sub">spm '+(_cadAvg>=170?'✅':'')+'</span></span></div>';
+ html+='<div class="snap-row snap-fwd"><span class="snap-l">📍 Milestone ถัดไป</span><span class="snap-v">'+_nextMs+' <span class="snap-sub">km · เหลือ '+(_nextMs-totalKm).toFixed(1)+' km</span></span></div>';
+ html+='</div>';
 
  // อ้างอิง — Pace + Carb รวมใต้ section เดียว แต่คนละแถว
  // (คนละหน่วย: pace = ความเร็ว/โซน · carb = คาร์บ/วันซ้อม → ยุบเป็นตารางเดียวไม่ได้ เพราะแกนไม่ตรงกัน)
