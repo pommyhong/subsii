@@ -681,10 +681,10 @@ try{const s=localStorage.getItem('mp-done');if(s)done=JSON.parse(s)}catch(e){}
 // env:'tm'=treadmill/incline → ตัดออกจาก EF · mix:1=หลาย activity วันเดียว → ตัดจาก EF
 const SEED=/*SEED:START*/{
  'w0d1':{km:5.02,min:31.38,hr:162.3,hx:173,cad:177,env:"tm"},'w0d5':{km:14.36,min:105.12,hr:169.1,hx:180,cad:171,type:"long",te:3.8,note:"Aerobic base กลับมา · 0 soreness post-run"},
- 'w1d1':{km:6.23,min:45.47,hr:161.05,hx:174,cad:173,mix:1,ses:[5.71,0.52]},'w1d2':{km:6.66,min:46.47,hr:168,hx:182,cad:173,type:"easy",note:"easy effort จริง แม้ heat 31°C"},'w1d3':{km:10.05,min:61.03,hr:162.5,hx:195,cad:160,mix:1,ses:[6.02,4.03]},'w1d6':{km:16.57,min:109.45,hr:170.4,hx:182,cad:176,type:"long",te:4.5,note:"Breakthrough — ระยะ+pace ดีขึ้น HR เท่าเดิม, decoupling หาย"},
- 'w2d1':{km:5.34,min:37.78,hr:158.1,hx:179,cad:169},'w2d2':{km:5.44,min:34.13,hr:163.51,hx:193,cad:170,mix:1,ses:[3.39,2.06],type:"quality",rpe:8,te:3.1,note:"Intervals 3×4min ครบ แต่ overpace (วิ่ง I แทน T) · max HR 193"},'w2d4':{km:6,min:36.92,hr:154.5,hx:164,cad:183,env:"tm",type:"easy",rpe:2,note:"Treadmill · cadence 182 breakthrough · feel Very Strong"},'w2d5':{km:18.12,min:128.57,hr:173.9,hx:185,cad:170,type:"long",te:4.6,note:"18km milestone แต่ HR เกิน cap · fatigue carry + shoe issue"},
- 'w3d1':{km:6.16,min:35.15,hr:162.8,hx:170,cad:180,env:"tm",type:"easy",note:"Treadmill incline 2.5% · easy baseline ติดแน่น"},'w3d2':{km:4.22,min:28.28,hr:159.7,hx:180,cad:170,mix:1,ses:[3.04,1.19],type:"easy",note:"Easy + 5 strides · cadence ramp 184→193"},'w3d5':{km:9.79,min:67.87,hr:158.15,hx:175,cad:171,mix:1,ses:[5.18,4.61],type:"long",note:"Easy long split 2 รอบ · recovery > long-run adaptation"},
- 'w4d1':{km:11.26,min:77.2,hr:166.76,hx:182,cad:172,mix:1,ses:[10.05,1.21],type:"quality",rpe:7,note:"10K under-fueled (ไม่ได้กินก่อนซ้อม) · HR drift +17 = lactate accumulate ก่อน aerobic ceiling · max HR 179 = ไม่ redline"},'w4d2':{km:8.16,min:54.47,hr:165.6,hx:178,cad:170,type:"easy",rpe:5,dc:10.4,note:"fueled+fresh แต่ dc 10.4% · L1 6:14 เร็วกว่า target 11s = ออกเร็ว + heat drift"},'w4d3':{km:4.61,min:30.23,hr:164.9,hx:176,cad:169,type:"easy",note:"Shakeout 4.6km/30min ✅ · km1 6:09 ใต้ floor 6:30 อีก (3rd ติด) · HR 165 เกิน cap 160 แค่ +5 คุมกว่า Wed"},'w4d5':{km:20.13,min:157.62,hr:164.27,hx:183,cad:168,mix:1,ses:[18.13,2.01],type:"long",rpe:4,dc:11.1,note:"18.1km long + 2km cd (2 session) · HR171 สูงแต่จบไม่เหนื่อย=heat · Superblast3 เด้งดี shoe issue resolved"}
+ 'w1d1':{km:6.23,min:45.47,hr:161.05,hx:174,cad:173,mix:1,ses:[5.71,0.52],bkm:5.71,bmin:39.83},'w1d2':{km:6.66,min:46.47,hr:168,hx:182,cad:173,type:"easy",note:"easy effort จริง แม้ heat 31°C"},'w1d3':{km:10.05,min:61.03,hr:162.5,hx:195,cad:160,mix:1,ses:[6.02,4.03],bkm:6.02,bmin:27.65},'w1d6':{km:16.57,min:109.45,hr:170.4,hx:182,cad:176,type:"long",te:4.5,note:"Breakthrough — ระยะ+pace ดีขึ้น HR เท่าเดิม, decoupling หาย"},
+ 'w2d1':{km:5.34,min:37.78,hr:158.1,hx:179,cad:169},'w2d2':{km:5.44,min:34.13,hr:163.51,hx:193,cad:170,mix:1,ses:[3.39,2.06],bkm:3.39,bmin:20.05,type:"quality",rpe:8,te:3.1,note:"Intervals 3×4min ครบ แต่ overpace (วิ่ง I แทน T) · max HR 193"},'w2d4':{km:6,min:36.92,hr:154.5,hx:164,cad:183,env:"tm",type:"easy",rpe:2,note:"Treadmill · cadence 182 breakthrough · feel Very Strong"},'w2d5':{km:18.12,min:128.57,hr:173.9,hx:185,cad:170,type:"long",te:4.6,note:"18km milestone แต่ HR เกิน cap · fatigue carry + shoe issue"},
+ 'w3d1':{km:6.16,min:35.15,hr:162.8,hx:170,cad:180,env:"tm",type:"easy",note:"Treadmill incline 2.5% · easy baseline ติดแน่น"},'w3d2':{km:4.22,min:28.28,hr:159.7,hx:180,cad:170,mix:1,ses:[3.04,1.19],bkm:3.04,bmin:19.55,type:"easy",note:"Easy + 5 strides · cadence ramp 184→193"},'w3d5':{km:9.79,min:67.87,hr:158.15,hx:175,cad:171,mix:1,ses:[5.18,4.61],bkm:5.18,bmin:33.02,type:"long",note:"Easy long split 2 รอบ · recovery > long-run adaptation"},
+ 'w4d1':{km:11.26,min:77.2,hr:166.76,hx:182,cad:172,mix:1,ses:[10.05,1.21],bkm:10.05,bmin:68.37,type:"quality",rpe:7,note:"10K under-fueled (ไม่ได้กินก่อนซ้อม) · HR drift +17 = lactate accumulate ก่อน aerobic ceiling · max HR 179 = ไม่ redline"},'w4d2':{km:8.16,min:54.47,hr:165.6,hx:178,cad:170,type:"easy",rpe:5,dc:10.4,note:"fueled+fresh แต่ dc 10.4% · L1 6:14 เร็วกว่า target 11s = ออกเร็ว + heat drift"},'w4d3':{km:4.61,min:30.23,hr:164.9,hx:176,cad:169,type:"easy",note:"Shakeout 4.6km/30min ✅ · km1 6:09 ใต้ floor 6:30 อีก (3rd ติด) · HR 165 เกิน cap 160 แค่ +5 คุมกว่า Wed"},'w4d5':{km:20.13,min:157.62,hr:164.27,hx:183,cad:168,mix:1,ses:[18.13,2.01],bkm:18.13,bmin:125.17,type:"long",rpe:4,dc:11.1,note:"18.1km long + 2km cd (2 session) · HR171 สูงแต่จบไม่เหนื่อย=heat · Superblast3 เด้งดี shoe issue resolved"}
 }/*SEED:END*/;
 const DONESEED=/*DONE:START*/{
  'w0d1':1,'w0d2':1,'w0d5':1,'w0d6':1,
@@ -927,8 +927,8 @@ function render(){
   html+='<td class="s-res">';
   if(lg&&lg.km>0){
    html+=lg.km+' km';
-   if(lg.ses&&lg.ses.length>1)html+=' <span class="s-multi tip">'+lg.ses.length+'×<span class="tip-body"><b>'+lg.ses.length+' session วันนี้</b> · '+lg.ses.join(' + ')+' km · ยอดรวมเป็น volume ของวัน</span></span>';
-   if(lg.min>0){const ps=lg.min*60/lg.km;html+=' · '+Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0')+'/km';}
+   if(lg.ses&&lg.ses.length>1)html+=' <span class="s-multi tip">'+lg.ses.length+'×<span class="tip-body"><b>'+lg.ses.length+' session วันนี้</b> · '+lg.ses.join(' + ')+' km · ยอดรวมเป็น volume ของวัน · pace = ของ run ยาวสุด</span></span>';
+   {const pkm=lg.bkm||lg.km,pmin=lg.bmin||lg.min;if(pmin>0){const ps=pmin*60/pkm;html+=' · '+Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0')+'/km';}}
    if(lg.hr>0)html+=' · HR '+Math.round(lg.hr);
    if(lg.env==='tm')html+=' <span class="tm">🏠</span>';
    const e=efOf(lg);
@@ -959,9 +959,9 @@ function render(){
   else{
    tip+='<div class="dc-tip-row"><span>Plan</span><b>'+(pv?pv+' km':'—')+(day.m?' · '+day.m+'′':'')+'</b></div>';
    if(lg&&lg.km>0){
-    const ps=lg.min*60/lg.km;const pace=Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0');
+    const _pkm=lg.bkm||lg.km,_pmin=lg.bmin||lg.min;const ps=_pmin*60/_pkm;const pace=Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0');
     tip+='<div class="dc-tip-row"><span>Actual</span><b>'+lg.km+' km · '+pace+'/km</b></div>';
-    if(lg.ses&&lg.ses.length>1)tip+='<div class="dc-tip-row"><span>Sessions</span><b>'+lg.ses.length+' ช่วง · '+lg.ses.join(' + ')+'</b></div>';
+    if(lg.ses&&lg.ses.length>1)tip+='<div class="dc-tip-row"><span>Sessions</span><b>'+lg.ses.length+' ช่วง · '+lg.ses.join(' + ')+' (pace=run ยาวสุด)</b></div>';
     if(lg.hr>0)tip+='<div class="dc-tip-row"><span>HR</span><b>'+Math.round(lg.hr)+(lg.hx>0?' / '+Math.round(lg.hx):'')+'</b></div>';
     if(pv>0){const d=lg.km-pv;const pct=Math.round(d/pv*100);
      tip+='<div class="dc-tip-delta '+(d>=0?'hit':'short')+'">'+(d>=0?'+':'')+d.toFixed(1)+' km ('+(pct>=0?'+':'')+pct+'%) vs plan</div>';
@@ -983,7 +983,7 @@ function render(){
   doneRuns.forEach(day=>{
    const l=getLog(selected,day.d);const dt=dateOf(selected,day.d);
    const t=l.type||day.t;const s=SESS[t]||SESS.easy;
-   const ps=l.min>0?l.min*60/l.km:0;
+   const _pkm=l.bkm||l.km,_pmin=l.bmin||l.min;const ps=_pmin>0?_pmin*60/_pkm:0;
    const pace=ps?Math.floor(ps/60)+':'+String(Math.round(ps%60)).padStart(2,'0'):'';
    html+='<div class="log-item"><div class="log-date"><span class="ld-num">'+dt.getDate()+'</span><span class="ld-mo">'+MONTHS[dt.getMonth()]+'</span></div>';
    html+='<div class="log-body"><div class="log-head"><div class="log-title">'+day.ti+' <span class="log-tw">W'+w.w+' '+DAYS[day.d]+'</span></div>';
