@@ -253,6 +253,32 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .ref-pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e7e4db;border-radius:16px;padding:6px 12px;font-size:11px;font-weight:600;color:#444;white-space:nowrap}
 .ref-pill b{font-weight:700;color:#1c1c1c}
 .ref-pill i{color:#a8a496;font-style:normal;font-size:10px}
+.ref-pill-menu{cursor:pointer;transition:border-color .15s,background .15s}
+.ref-pill-menu:hover{border-color:#bdb8aa;background:#faf9f5}
+.ref-pill-menu.active{border-color:#1c1c1c;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.ref-caret{color:#a8a496;font-size:9px;margin-left:1px}
+.ref-pill-menu.active .ref-caret{transform:rotate(180deg);display:inline-block}
+.nutri-wrap{display:flex;flex-wrap:wrap;gap:14px;margin-top:14px;align-items:flex-start}
+#nutri-menus{flex:1 1 340px;min-width:0}
+.nutri-menu{display:none;background:#fff;border:1px solid #e7e4db;border-radius:14px;padding:14px 16px}
+.nutri-menu.open{display:block}
+.nutri-head{font-size:13px;font-weight:700;margin-bottom:8px}
+.nutri-tg{color:#a8a496;font-weight:400;font-size:11px}
+.nutri-note{font-size:11px;color:#b07700;background:#fdf7e8;border-radius:8px;padding:6px 10px;margin-bottom:8px;line-height:1.5}
+.nutri-tbl{width:100%;border-collapse:collapse;font-size:12px}
+.nutri-tbl th{text-align:left;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#a8a496;font-weight:700;padding:4px 6px;border-bottom:1px solid var(--line)}
+.nutri-tbl td{padding:6px;border-bottom:1px solid #f1efe9;color:#444;vertical-align:top}
+.nutri-tbl td:nth-child(n+3){text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums;color:#1c1c1c;font-weight:600}
+.nutri-sum td{border-top:2px solid var(--line);border-bottom:none;font-weight:700;color:#1c1c1c;padding-top:8px}
+.nutri-sum td:first-child{text-align:left}
+.nutri-ok{font-size:11px;color:#2f9e6a;font-weight:600;margin-top:8px}
+.recovery-block{flex:1 1 240px;background:#f3faf6;border:1px solid #cfe9da;border-radius:14px;padding:14px 16px}
+.recovery-title{font-size:13px;font-weight:700;margin-bottom:10px;color:#1c1c1c}
+.recovery-row{padding:8px 0;border-bottom:1px solid #ddeee4;font-size:12px}
+.recovery-row:last-child{border-bottom:none}
+.recovery-row b{display:inline-block;color:#1c1c1c}
+.recovery-row .rc-goal{display:inline-block;margin-left:8px;color:#2f9e6a;font-weight:600;font-size:11px}
+.recovery-row .rc-eat{display:block;color:#555;margin-top:2px;line-height:1.5}
 .ref-sub{font-size:11px;font-weight:600;color:var(--ink-2);margin:16px 0 8px}
 .ref-sub i{color:var(--faint);font-weight:500;font-style:normal}
 .section-l + .ref-sub{margin-top:0}
@@ -368,6 +394,27 @@ const SESS={
  race:{c:'#e63012',tc:'#fff',l:'RACE',bg:'#e63012'},
 };
 const CARB={rest:[180,240],easy:[300,360],quality:[420,480],long:[480,560],race:[550,650]};
+// 🍱 เมนูเต็มวันต่อ session type (content จาก nutrition-menus.md · 60kg · no peanut butter)
+const NUTRI={
+ easy:{label:'Easy',target:'300–360g',color:'#2f9e6a',sum:'~305g · 2,210 cal · 96g prot',ok:'✅ ถึง target · protein พอ',note:'',rows:[
+  ['เช้า','ข้าวต้มหมู + กล้วย 1','70g','450','16g'],
+  ['กลางวัน','ข้าวกะเพราไก่ 2 ทัพพี + ไข่ดาว','75g','680','38g'],
+  ['บ่าย','ขนมปัง+แยม + นม 1 กล่อง','40g','270','12g'],
+  ['เย็น','ข้าว 2 ทัพพี + ผัดกุ้ง','80g','650','28g'],
+  ['ผลไม้','ส้ม 2 + กล้วย 1','40g','160','2g']]},
+ long:{label:'Long',target:'480–560g',color:'#3a86c8',sum:'~490g · 3,070 cal · 116g prot',ok:'✅ ถึง target · protein เกินพอ',note:'⚠️ โหลดหลัก = เย็นวันศุกร์ ~165g (ข้าว 2 ทัพพี + ผัดไทย + น้ำผลไม้)',rows:[
+  ['ก่อนวิ่ง 04:30','ข้าวต้มกุ้งใส + กล้วย 1','60g','320','12g'],
+  ['ระหว่างวิ่ง','gel ×2 (km8, km14)','50g','200','0'],
+  ['หลังวิ่ง 30′','→ ดูการ์ด Recovery','45g','290','12g'],
+  ['กลางวัน','ข้าวมันไก่ + น้ำส้มคั้น','100g','770','32g'],
+  ['บ่าย','ขนมปังโฮลวีต+แยม + นม','55g','350','12g'],
+  ['เย็น','ข้าว 2 ทัพพี + ผัดซีอิ๊วไก่+ไข่','95g','700','38g'],
+  ['ก่อนนอน','โยเกิร์ต + กล้วย','40g','240','10g'],
+  ['ผลไม้/เสริม','น้ำผลไม้ + ผลไม้','45g','200','0']]}};
+const RECOVERY=[
+ ['Easy','ไม่เร่ง','มื้อปกติพอ ไม่ต้องพิเศษ'],
+ ['Quality','45g C / 15g P','นมช็อค 1 กล่อง + กล้วย 1'],
+ ['Long 17–18k','65g C / 20g P','① นมช็อค + ข้าวไก่ไข่ จานเล็ก · ② เวย์ + ขนมปังแยม + กล้วย']];
 const PHCOLOR={Base:'#2f9e6a',Threshold:'#cf8f00','10K-Peak':'#e63012',Recovery:'#3a86c8','M-Build':'#2f9e6a','M-Peak':'#e63012',Taper:'#3a86c8'};
 // races (A-race = ATM marathon) · เพซเป้าหมายตามประเภท (ใช้ใน schedule)
 const RACES=[
@@ -857,6 +904,13 @@ function renderProg(){
  pb.innerHTML=h;
 }
 
+function toggleMenu(t){
+ const el=document.getElementById('nm-'+t);if(!el)return;
+ const wasOpen=el.classList.contains('open');
+ document.querySelectorAll('.nutri-menu.open').forEach(m=>m.classList.remove('open'));
+ document.querySelectorAll('.ref-pill-menu.active').forEach(p=>p.classList.remove('active'));
+ if(!wasOpen){el.classList.add('open');const pill=[...document.querySelectorAll('.ref-pill-menu')].find(p=>(p.getAttribute('onclick')||'').includes("'"+t+"'"));if(pill)pill.classList.add('active');}
+}
 function render(){
  renderHero();
  renderRaces();
@@ -1070,11 +1124,28 @@ function render(){
   html+='<span class="ref-pill"><span class="ref-dot" style="background:'+p[1]+'"></span><b>'+p[0]+'</b> '+p[2]+'</span>';
  });
  html+='</div>';
- html+='<div class="ref-sub">Carb · 60 kg <i>กรัม/วัน</i></div><div class="ref-row">';
- [['พัก',CARB.rest,'var(--muted)'],['Easy',CARB.easy,'#2f9e6a'],['Quality',CARB.quality,'#e63012'],['Long',CARB.long,'#3a86c8'],['Race',CARB.race,'#b07700']].forEach(c=>{
-  html+='<span class="ref-pill"><span class="ref-dot" style="background:'+c[2]+'"></span><b>'+c[0]+'</b> '+c[1][0]+'–'+c[1][1]+'g</span>';
+ html+='<div class="ref-sub">Carb · 60 kg <i>กรัม/วัน · กดดูเมนูทั้งวัน</i></div><div class="ref-row">';
+ [['พัก',CARB.rest,'var(--muted)','rest'],['Easy',CARB.easy,'#2f9e6a','easy'],['Quality',CARB.quality,'#e63012','quality'],['Long',CARB.long,'#3a86c8','long'],['Race',CARB.race,'#b07700','race']].forEach(c=>{
+  const hm=NUTRI[c[3]];
+  html+='<span class="ref-pill'+(hm?' ref-pill-menu':'')+'"'+(hm?' onclick="toggleMenu(\''+c[3]+'\')"':'')+'><span class="ref-dot" style="background:'+c[2]+'"></span><b>'+c[0]+'</b> '+c[1][0]+'–'+c[1][1]+'g'+(hm?' <span class="ref-caret">▾</span>':'')+'</span>';
  });
  html+='</div>';
+ // 🍱 menu accordion + 🔋 recovery (responsive: desktop วางข้างกัน, mobile ซ้อน)
+ html+='<div class="nutri-wrap">';
+ html+='<div id="nutri-menus">';
+ ['easy','long'].forEach(t=>{const m=NUTRI[t];
+  html+='<div class="nutri-menu" id="nm-'+t+'">';
+  html+='<div class="nutri-head" style="color:'+m.color+'">🍱 '+m.label+' · เมนูเต็มวัน <span class="nutri-tg">'+m.target+'</span></div>';
+  if(m.note)html+='<div class="nutri-note">'+m.note+'</div>';
+  html+='<table class="nutri-tbl"><tr><th>มื้อ</th><th>เมนู</th><th>carb</th><th>cal</th><th>prot</th></tr>';
+  m.rows.forEach(r=>{html+='<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td><td>'+r[4]+'</td></tr>'});
+  html+='<tr class="nutri-sum"><td colspan="2">รวม</td><td>'+m.sum.split(' · ')[0]+'</td><td colspan="2">'+m.sum.split(' · ').slice(1).join(' · ')+'</td></tr>';
+  html+='</table><div class="nutri-ok">'+m.ok+'</div></div>';
+ });
+ html+='</div>';
+ html+='<div class="recovery-block"><div class="recovery-title">🔋 Recovery · เพิ่งวิ่งเสร็จ <span class="nutri-tg">window 30 นาที</span></div>';
+ RECOVERY.forEach(r=>{html+='<div class="recovery-row"><b>'+r[0]+'</b><span class="rc-goal">'+r[1]+'</span><span class="rc-eat">'+r[2]+'</span></div>'});
+ html+='</div></div>';
 
  // ท่าเวทประจำสัปดาห์ — แสดงเฉพาะถ้าสัปดาห์นี้มี weights day
  const hasWeights=w.d.some(day=>day.t==='cross'&&/weight/i.test(day.ti));
