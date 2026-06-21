@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <!-- Background: bright center, deeper blue edges -->
+    <radialGradient id="bg" cx="50%" cy="32%" r="72%">
+      <stop offset="0%"   stop-color="#7ddeff"/>
+      <stop offset="45%"  stop-color="#3ab8f5"/>
+      <stop offset="100%" stop-color="#0b7ecb"/>
+    </radialGradient>
+
+    <!-- Ghost body: white core, soft blue fade at rim -->
+    <radialGradient id="ghost" cx="50%" cy="28%" r="62%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="50%"  stop-color="#eaf6ff"/>
+      <stop offset="85%"  stop-color="#c4e9ff"/>
+      <stop offset="100%" stop-color="#9fd8f8" stop-opacity="0.55"/>
+    </radialGradient>
+
+    <!-- Ghost aura/glow layer (blurred, behind body) -->
+    <filter id="aura" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+
+    <!-- Eye gradient: white top, faint blue shadow bottom -->
+    <radialGradient id="eye" cx="38%" cy="28%" r="70%">
+      <stop offset="0%"   stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#cce9ff"/>
+    </radialGradient>
+
+    <!-- Clip to rounded square -->
+    <clipPath id="frame">
+      <rect width="100" height="100" rx="22"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+
+  <g clip-path="url(#frame)">
+    <!-- Ghost aura (soft glow behind body) -->
+    <ellipse cx="50" cy="98" rx="52" ry="56" fill="#d8f2ff" opacity="0.55" filter="url(#aura)"/>
+
+    <!-- Ghost body -->
+    <ellipse cx="50" cy="98" rx="49" ry="53" fill="url(#ghost)"/>
+
+    <!-- Dome top highlight (lens flare feel) -->
+    <ellipse cx="42" cy="53" rx="16" ry="6.5"
+             fill="white" opacity="0.28"
+             transform="rotate(-18 42 53)"/>
+
+    <!-- Left eye -->
+    <ellipse cx="36" cy="66" rx="8.5" ry="10.5" fill="url(#eye)"/>
+    <!-- Right eye -->
+    <ellipse cx="64" cy="66" rx="8.5" ry="10.5" fill="url(#eye)"/>
+  </g>
+</svg>
