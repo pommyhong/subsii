@@ -377,6 +377,19 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .cd-block{min-width:40px}
 .hero-race{font-size:20px}
 .race-line{flex-direction:column}
+/* ── schedule: บีบ table ให้พอดีจอ (ไม่ต้องปัดข้าง · ไม่ยืดยาว) ── */
+.sched-wrap{overflow-x:visible;background:#fff}
+.sched{min-width:0;width:100%;table-layout:fixed;font-size:12px}
+.sched th,.sched td{padding:8px 6px;white-space:normal;word-break:break-word}
+.sched th{font-size:9px;letter-spacing:.04em}
+/* ซ่อนคอลัมน์ ผลลัพธ์·Strava (col 5) — มีสรุปผลจริง+กราฟ section ล่าง */
+.sched th:nth-child(5),.sched td:nth-child(5){display:none}
+/* คุมความกว้างคอลัมน์ที่เหลือ */
+.sched th:nth-child(1),.sched td:nth-child(1){width:50px}
+.sched th:nth-child(3),.sched td:nth-child(3){width:58px}
+.sched th:nth-child(4),.sched td:nth-child(4){width:74px}
+.sched .s-ti{font-size:12px}
+.sched .s-de{font-size:10px}
 }
 
 /* ===== UX v2 — 2026-06-21 ===== */
@@ -1017,7 +1030,7 @@ function render(){
   const showDone=dn2&&!isR;        // rest day ที่มี activity (badminton) ไม่โชว์ DONE
   const lg=getLog(selected,day.d);
   const rcls=isR?'rest':showDone?'done':tdy?'today':'';
-  html+='<tr class="'+rcls+'">';
+  html+='<tr class="'+rcls+'" style="--dc:'+st.c+'">';
   // col วัน
   const _stIcon=showDone?'<span class="s-state-icon" style="color:#2faa72">✓</span>':isR?'<span class="s-state-icon" style="color:var(--faint)">–</span>':tdy?'<span class="s-state-icon" style="color:#e63012">▶</span>':'<span class="s-state-icon"></span>';
   html+='<td class="s-day" style="border-left-color:'+st.c+'">'+_stIcon+DAYS[day.d]+(tdy&&!dn2?'<span class="s-today-tag">TODAY</span>':'')+'<span class="s-dt">'+fmt(dt)+'</span></td>';
@@ -1028,11 +1041,11 @@ function render(){
   html+='</td>';
   // col แผน
   const plan=[];if(day.k)plan.push(day.k+' km');if(day.m)plan.push(day.m+'′');
-  html+='<td class="s-plan">'+(isR?'พัก':(plan.join(' · ')||'—'))+'</td>';
+  html+='<td class="s-plan" data-l="แผน">'+(isR?'พัก':(plan.join(' · ')||'—'))+'</td>';
   // col เพซเป้าหมาย
-  html+='<td class="s-plan" style="color:'+(isR?'#aaa69a':st.tc)+'">'+(TPACE[day.t]||'—')+'</td>';
+  html+='<td class="s-plan" data-l="เพซเป้าหมาย" style="color:'+(isR?'#aaa69a':st.tc)+'">'+(TPACE[day.t]||'—')+'</td>';
   // col ผลลัพธ์ (Strava actual)
-  html+='<td class="s-res">';
+  html+='<td class="s-res" data-l="ผลลัพธ์ · Strava">';
   if(lg&&lg.km>0){
    html+=lg.km+' km';
    if(lg.ses&&lg.ses.length>1)html+=' <span class="s-multi tip">'+lg.ses.length+'×<span class="tip-body"><b>'+lg.ses.length+' session วันนี้</b> · '+lg.ses.join(' + ')+' km · ยอดรวมเป็น volume ของวัน · pace = ของ run ยาวสุด</span></span>';
@@ -1318,37 +1331,6 @@ setTimeout(()=>{
  const el=document.querySelector('.hero-kpi');
  if(el){const b=document.createElement('div');b.className='hero-kpi-item';b.innerHTML='<div class="hk-v" style="font-size:16px;letter-spacing:0">'+t+'</div><div class="hk-l">sync ที่แล้ว</div>';el.appendChild(b);}
 })();
-</script>
-<script>
-/* DEBUG-IOS LIVE — temp · tap box to dismiss · ปัดตารางแล้วดูค่า MAX */
-window.addEventListener('load',()=>{setTimeout(()=>{
-  const de=document.documentElement;
-  const box=document.createElement('div');
-  box.style.cssText='position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:8px;z-index:99999;white-space:pre-wrap';
-  box.onclick=()=>box.remove();
-  document.body.appendChild(box);
-  let maxSW=0,maxScrollL=0,worst='';
-  const upd=()=>{
-    const cw=de.clientWidth;
-    const sw=de.scrollWidth;
-    const sl=window.pageXOffset||de.scrollLeft||0;
-    if(sw>maxSW)maxSW=sw;
-    if(sl>maxScrollL)maxScrollL=sl;
-    if(sw>cw){ // find culprit live
-      const clips=el=>{const s=getComputedStyle(el);return ['hidden','auto','scroll','clip'].includes(s.overflowX)};
-      for(const el of document.querySelectorAll('.app *')){
-        const r=el.getBoundingClientRect();
-        if(r.right<=cw+1)continue;
-        let a=el.parentElement,c=false;while(a){if(clips(a)){c=true;break;}a=a.parentElement;}
-        if(!c){worst=el.tagName+'.'+[...el.classList].join('.').slice(0,24)+' R'+Math.round(r.right);break;}
-      }
-    }
-    box.innerText='cw='+cw+' SW='+sw+'\nMAX-SW='+maxSW+' MAX-scrollX='+Math.round(maxScrollL)+'\nculprit: '+(worst||'-');
-  };
-  upd();
-  ['scroll','touchmove','touchend'].forEach(e=>window.addEventListener(e,upd,{passive:true}));
-  document.querySelectorAll('.sched-wrap,.week-nav').forEach(el=>['scroll','touchmove'].forEach(e=>el.addEventListener(e,upd,{passive:true})));
-},400);});
 </script>
 </body>
 </html>
