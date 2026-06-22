@@ -385,11 +385,15 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 /* ซ่อนคอลัมน์ ผลลัพธ์·Strava (col 5) — มีสรุปผลจริง+กราฟ section ล่าง */
 .sched th:nth-child(5),.sched td:nth-child(5){display:none}
 /* คุมความกว้างคอลัมน์ที่เหลือ */
-.sched th:nth-child(1),.sched td:nth-child(1){width:50px}
+.sched th:nth-child(1),.sched td:nth-child(1){width:56px}
 .sched th:nth-child(3),.sched td:nth-child(3){width:58px}
 .sched th:nth-child(4),.sched td:nth-child(4){width:74px}
 .sched .s-ti{font-size:12px}
 .sched .s-de{font-size:10px}
+/* ช่องวัน: ไอคอน+วันบรรทัดแรก · TODAY ไม่ตกคำ */
+.sched td.s-day{line-height:1.5}
+.sched .s-state-icon{width:auto;margin-right:3px}
+.sched .s-today-tag{display:inline-block;margin:2px 0 0;white-space:nowrap}
 }
 
 /* ===== UX v2 — 2026-06-21 ===== */
