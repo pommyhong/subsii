@@ -1319,5 +1319,27 @@ setTimeout(()=>{
  if(el){const b=document.createElement('div');b.className='hero-kpi-item';b.innerHTML='<div class="hk-v" style="font-size:16px;letter-spacing:0">'+t+'</div><div class="hk-l">sync ที่แล้ว</div>';el.appendChild(b);}
 })();
 </script>
+<script>
+/* DEBUG-IOS — temp on live, will be removed · tap box to dismiss */
+window.addEventListener('load',()=>{setTimeout(()=>{
+  const de=document.documentElement;
+  const cw=de.clientWidth;
+  const lines=['cw='+cw+' docSW='+de.scrollWidth+' bodySW='+document.body.scrollWidth,''];
+  const clips=el=>{const s=getComputedStyle(el);return ['hidden','auto','scroll','clip'].includes(s.overflowX)};
+  document.querySelectorAll('*').forEach(el=>{
+    const r=el.getBoundingClientRect();
+    if(r.right<=cw+1)return;
+    let a=el.parentElement,clipped=false;
+    while(a){if(clips(a)){clipped=true;break;}a=a.parentElement;}
+    if(!clipped)lines.push('UNCLIP '+el.tagName+'.'+[...el.classList].join('.').slice(0,30)+' R'+Math.round(r.right)+' W'+Math.round(r.width));
+  });
+  if(lines.length<3)lines.push('(no unclipped overflow found)');
+  const box=document.createElement('div');
+  box.style.cssText='position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:8px;z-index:99999;white-space:pre-wrap;max-height:55vh;overflow:auto';
+  box.innerText=lines.join('\n');
+  box.onclick=()=>box.remove();
+  document.body.appendChild(box);
+},400);});
+</script>
 </body>
 </html>
