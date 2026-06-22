@@ -1320,25 +1320,34 @@ setTimeout(()=>{
 })();
 </script>
 <script>
-/* DEBUG-IOS — temp on live, will be removed · tap box to dismiss */
+/* DEBUG-IOS LIVE — temp · tap box to dismiss · ปัดตารางแล้วดูค่า MAX */
 window.addEventListener('load',()=>{setTimeout(()=>{
   const de=document.documentElement;
-  const cw=de.clientWidth;
-  const lines=['cw='+cw+' docSW='+de.scrollWidth+' bodySW='+document.body.scrollWidth,''];
-  const clips=el=>{const s=getComputedStyle(el);return ['hidden','auto','scroll','clip'].includes(s.overflowX)};
-  document.querySelectorAll('*').forEach(el=>{
-    const r=el.getBoundingClientRect();
-    if(r.right<=cw+1)return;
-    let a=el.parentElement,clipped=false;
-    while(a){if(clips(a)){clipped=true;break;}a=a.parentElement;}
-    if(!clipped)lines.push('UNCLIP '+el.tagName+'.'+[...el.classList].join('.').slice(0,30)+' R'+Math.round(r.right)+' W'+Math.round(r.width));
-  });
-  if(lines.length<3)lines.push('(no unclipped overflow found)');
   const box=document.createElement('div');
-  box.style.cssText='position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:8px;z-index:99999;white-space:pre-wrap;max-height:55vh;overflow:auto';
-  box.innerText=lines.join('\n');
+  box.style.cssText='position:fixed;top:0;left:0;right:0;background:#000;color:#0f0;font:11px monospace;padding:8px;z-index:99999;white-space:pre-wrap';
   box.onclick=()=>box.remove();
   document.body.appendChild(box);
+  let maxSW=0,maxScrollL=0,worst='';
+  const upd=()=>{
+    const cw=de.clientWidth;
+    const sw=de.scrollWidth;
+    const sl=window.pageXOffset||de.scrollLeft||0;
+    if(sw>maxSW)maxSW=sw;
+    if(sl>maxScrollL)maxScrollL=sl;
+    if(sw>cw){ // find culprit live
+      const clips=el=>{const s=getComputedStyle(el);return ['hidden','auto','scroll','clip'].includes(s.overflowX)};
+      for(const el of document.querySelectorAll('.app *')){
+        const r=el.getBoundingClientRect();
+        if(r.right<=cw+1)continue;
+        let a=el.parentElement,c=false;while(a){if(clips(a)){c=true;break;}a=a.parentElement;}
+        if(!c){worst=el.tagName+'.'+[...el.classList].join('.').slice(0,24)+' R'+Math.round(r.right);break;}
+      }
+    }
+    box.innerText='cw='+cw+' SW='+sw+'\nMAX-SW='+maxSW+' MAX-scrollX='+Math.round(maxScrollL)+'\nculprit: '+(worst||'-');
+  };
+  upd();
+  ['scroll','touchmove','touchend'].forEach(e=>window.addEventListener(e,upd,{passive:true}));
+  document.querySelectorAll('.sched-wrap,.week-nav').forEach(el=>['scroll','touchmove'].forEach(e=>el.addEventListener(e,upd,{passive:true})));
 },400);});
 </script>
 </body>
