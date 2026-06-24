@@ -422,9 +422,16 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 /* ── today row highlight on jump ── */
 @keyframes row-hi{0%,100%{background:inherit}30%,70%{background:#fdece9}}
 .sched tr.jump-hi{animation:row-hi 1.2s ease}
+/* ── pull-to-refresh ── */
+#ptr{position:fixed;top:0;left:0;right:0;height:0;overflow:hidden;display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;font-weight:600;color:var(--muted);background:var(--bg);z-index:9999;pointer-events:none}
+#ptr.releasing{transition:height .22s cubic-bezier(.22,1,.36,1)}
+#ptr .ptr-spin{width:15px;height:15px;border:2px solid var(--line);border-top-color:var(--muted);border-radius:50%}
+#ptr.loading .ptr-spin{animation:ptrspin .6s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
+<div id="ptr"><div class="ptr-spin"></div><span id="ptr-txt">ดึงลงเพื่อรีเฟรช</span></div>
 <div class="app">
 <div class="hero" id="hero"></div>
 <div id="races"></div>
@@ -1336,6 +1343,32 @@ setTimeout(()=>{
  const t=diffMin<60?diffMin+'m':diffMin<1440?Math.floor(diffMin/60)+'h':Math.floor(diffMin/1440)+'d';
  const el=document.querySelector('.hero-kpi');
  if(el){const b=document.createElement('div');b.className='hero-kpi-item';b.innerHTML='<div class="hk-v" style="font-size:16px;letter-spacing:0">'+t+'</div><div class="hk-l">sync ที่แล้ว</div>';el.appendChild(b);}
+})();
+// pull-to-refresh → hard reload + cache-bust (static dashboard: เห็นข้อมูลล่าสุดที่ deploy ไว้ ไม่ค้าง cache)
+(function(){
+ const ptr=document.getElementById('ptr'),txt=document.getElementById('ptr-txt');
+ const TH=70,MAX=110; // threshold / max pull (px after damping)
+ let startY=0,pulling=false,h=0;
+ const at=()=>{txt.textContent=h>=TH?'ปล่อยเพื่อรีเฟรช':'ดึงลงเพื่อรีเฟรช';};
+ addEventListener('touchstart',e=>{
+  if(scrollY>0||ptr.classList.contains('loading'))return;
+  startY=e.touches[0].clientY;pulling=true;h=0;ptr.classList.remove('releasing');
+ },{passive:true});
+ addEventListener('touchmove',e=>{
+  if(!pulling)return;
+  const d=e.touches[0].clientY-startY;
+  if(d<=0){pulling=false;ptr.style.height='0';return;}
+  e.preventDefault(); // override native overscroll bounce
+  h=Math.min(d*0.5,MAX);ptr.style.height=h+'px';at();
+ },{passive:false});
+ addEventListener('touchend',()=>{
+  if(!pulling)return;pulling=false;ptr.classList.add('releasing');
+  if(h>=TH){
+   ptr.classList.add('loading');ptr.style.height='44px';txt.textContent='กำลังโหลด…';
+   const base=location.href.split('?')[0].split('#')[0];
+   setTimeout(()=>location.replace(base+'?v='+Date.now()),350);
+  }else ptr.style.height='0';
+ },{passive:true});
 })();
 </script>
 </body>
