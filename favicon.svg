@@ -1,37 +1,35 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <radialGradient id="bg" cx="50%" cy="32%" r="72%">
-      <stop offset="0%"   stop-color="#7ddeff"/>
-      <stop offset="45%"  stop-color="#3ab8f5"/>
-      <stop offset="100%" stop-color="#0b7ecb"/>
+    <radialGradient id="bg" cx="42%" cy="32%" r="72%">
+      <stop offset="0%" stop-color="#72D4FF"/>
+      <stop offset="55%" stop-color="#29AAEF"/>
+      <stop offset="100%" stop-color="#1480D4"/>
     </radialGradient>
-
-    <linearGradient id="bolt" x1="60%" y1="0%" x2="40%" y2="100%">
-      <stop offset="0%"   stop-color="#ffffff"/>
-      <stop offset="100%" stop-color="#cdeeff"/>
-    </linearGradient>
-
-    <filter id="glow" x="-40%" y="-25%" width="180%" height="150%">
-      <feGaussianBlur stdDeviation="5" result="blur"/>
-      <feMerge>
-        <feMergeNode in="blur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-
-    <clipPath id="frame">
-      <rect width="100" height="100" rx="22"/>
-    </clipPath>
+    <radialGradient id="blob" cx="50%" cy="38%" r="58%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="1"/>
+      <stop offset="42%"  stop-color="#D8F0FF" stop-opacity="0.96"/>
+      <stop offset="75%"  stop-color="#A8DAFF" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#7EC8FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="eye-l" cx="40%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#C8E8FF" stop-opacity="0.6"/>
+    </radialGradient>
+    <radialGradient id="eye-r" cx="40%" cy="30%" r="65%">
+      <stop offset="0%"   stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#C8E8FF" stop-opacity="0.6"/>
+    </radialGradient>
   </defs>
 
-  <rect width="100" height="100" rx="22" fill="url(#bg)"/>
+  <!-- Rounded square background -->
+  <rect width="100" height="100" rx="22" ry="22" fill="url(#bg)"/>
 
-  <g clip-path="url(#frame)">
-    <!-- Glow behind bolt -->
-    <polygon points="58,12 38,12 45,48 27,48 61,88 55,52 71,52"
-             fill="white" opacity="0.45" filter="url(#glow)"/>
-    <!-- Bolt -->
-    <polygon points="58,12 38,12 45,48 27,48 61,88 55,52 71,52"
-             fill="url(#bolt)" opacity="0.94"/>
-  </g>
+  <!-- White glow blob rising from bottom -->
+  <ellipse cx="50" cy="94" rx="60" ry="54" fill="url(#blob)"/>
+
+  <!-- Left eye -->
+  <ellipse cx="36.5" cy="57" rx="8" ry="10.5" fill="url(#eye-l)"/>
+
+  <!-- Right eye -->
+  <ellipse cx="63.5" cy="57" rx="8" ry="10.5" fill="url(#eye-r)"/>
 </svg>
