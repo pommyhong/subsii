@@ -312,6 +312,12 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .lb-te{background:#eaf7f0;color:#2faa72}
 .lb-ef{background:#e8f2fb;color:#3a86c8}
 .lb-tm{background:#fdf6e3;color:#9a6b00}
+.lb-warn{background:#fdf6e3;color:#9a6b00;font-size:10px;padding:2px 8px}
+.lb-toggle{border:none;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:2px}
+.lb-chev{font-size:9px;transition:transform .15s}
+.lb-toggle.open .lb-chev{transform:rotate(180deg)}
+.lb-more{display:none;gap:6px}
+.lb-more.open{display:contents}
 .log-note{font-size:12px;color:var(--ink-2);line-height:1.55;margin-top:10px}
 .log-empty{font-size:12px;color:var(--muted);background:#fff;border:1px dashed #ddd9cf;border-radius:16px;padding:18px;text-align:center}
 /* 🎯 Note — Peak-End close + journey context */
@@ -847,6 +853,11 @@ function selWeek(i){selected=i;render();
  }
 }
 function setHRMode(m){window.__hrMode=m;render()}
+function toggleMore(btn){
+ const more=btn.nextElementSibling;const open=more.classList.toggle('open');
+ btn.classList.toggle('open',open);
+ btn.firstChild.textContent=(open?'ซ่อน':'+'+more.children.length)+' ';
+}
 // chip buttons (ใช้ซ้ำได้ทั้ง top nav + ใน section)
 function chipBtns(){
  const cw=curWeek();
@@ -1045,7 +1056,7 @@ function render(){
  // days
  html+=chipBar('เลือกสัปดาห์')+'<div class="section-l">ตารางซ้อมสัปดาห์นี้</div>';
  html+='<div class="type-legend">'+['easy','quality','long','cross','rest'].map(t=>{const s=SESS[t];return '<span class="tl-chip" style="color:'+s.tc+';background:'+s.bg+'">'+s.l+'</span>'}).join('')+'</div>';
- html+='<div class="sched-wrap"><table class="sched"><thead><tr><th>วัน</th><th>รายการซ้อม</th><th>แผน</th><th>เพซเป้าหมาย</th><th>ผลลัพธ์ · Strava</th></tr></thead><tbody>';
+ html+='<div class="sched-wrap"><table class="sched"><thead><tr><th>วัน</th><th>รายการซ้อม</th><th>แผน</th><th>เพซเป้าหมาย</th><th>ผลลัพธ์</th></tr></thead><tbody>';
  w.d.forEach(day=>{
   const st=SESS[day.t]||SESS.rest;
   const dt=dateOf(selected,day.d);
@@ -1132,20 +1143,24 @@ function render(){
    const _pkm=l.bkm||l.km,_pmin=l.bmin||l.min;const ps=_pmin>0?_pmin*60/_pkm:0;
    const pace=ps?paceFmt(ps):'';
    html+='<div class="log-item"><div class="log-date"><span class="ld-num">'+dt.getDate()+'</span><span class="ld-mo">'+MONTHS[dt.getMonth()]+'</span></div>';
-   html+='<div class="log-body"><div class="log-head"><div class="log-title">'+day.ti+' <span class="log-tw">W'+w.w+' '+DAYS[day.d]+'</span></div>';
+   html+='<div class="log-body"><div class="log-head"><div class="log-title">'+day.ti+' <span class="log-tw">W'+w.w+' '+DAYS[day.d]+'</span>'+(l.sl>0&&l.sl<60?' <span class="lb lb-warn tip">😴 sleep '+l.sl+'<span class="tip-body"><b>Sleep score</b> ต่ำกว่า 60 คืนก่อนวิ่ง — อาจอธิบาย performance วันนี้ (คะแนนปกติไม่โชว์ ไม่ใช่ทุกวัน)</span></span>':'')+'</div>';
    if(l.rpe)html+='<div class="log-rpe tip">'+l.rpe+'/10<span>RPE<i class="tip-i">i</i><span class="tip-body"><b>RPE</b> (Rate of Perceived Exertion) · 1=สบายมาก, 10=ตายแน่ · ปอม subjective rate effort หลังวิ่ง</span></span></div>';
    html+='</div>';
    html+='<span class="s-chip" style="color:'+s.tc+';background:'+s.bg+'">'+s.l+'</span>';
+   const more=[];
+   if(l.cad>0)more.push('<span class="lb tip">👣 '+l.cad+'<span class="tip-body"><b>Cadence</b> = ก้าว/นาที · target <b>170+</b> ลด impact, efficient stride</span></span>');
+   if(l.te)more.push('<span class="lb lb-te tip">📈 TE '+l.te+'<span class="tip-body"><b>Training Effect</b> (Garmin) · 1-5 · บอกว่า run นี้กระตุ้น aerobic ระดับไหน · 3-4 = optimal stimulus</span></span>');
+   if(l.dc)more.push('<span class="lb lb-hr tip">📊 dc '+l.dc+'%<span class="tip-body"><b>Decoupling</b> (Pa:HR) · &lt;5% = aerobic base ติด · &gt;10% = base ไม่พอ / overpace / under-fueled</span></span>');
+   const e=efOf(l);if(e&&t==='easy'&&l.env!=='tm'&&!l.mix)more.push('<span class="lb lb-ef">EF '+e.toFixed(2)+'</span>');
+   if(l.env==='tm')more.push('<span class="lb lb-tm">🏠 treadmill</span>');
    html+='<div class="log-badges">';
    html+='<span class="lb lb-km">📍 '+l.km+' กม.'+(l.ses&&l.ses.length>1?' <span class="ses-split">('+l.ses.length+' ช่วง: '+l.ses.join(' + ')+')</span>':'')+'</span>';
    if(pace)html+='<span class="lb lb-pace">⚡ '+pace+'/กม.</span>';
    if(l.hr>0)html+='<span class="lb lb-hr">❤️ HR '+Math.round(l.hr)+(l.hx>0?'/'+Math.round(l.hx):'')+'</span>';
-   if(l.cad>0)html+='<span class="lb tip">👣 '+l.cad+'<span class="tip-body"><b>Cadence</b> = ก้าว/นาที · target <b>170+</b> ลด impact, efficient stride</span></span>';
-   if(l.te)html+='<span class="lb lb-te tip">📈 TE '+l.te+'<span class="tip-body"><b>Training Effect</b> (Garmin) · 1-5 · บอกว่า run นี้กระตุ้น aerobic ระดับไหน · 3-4 = optimal stimulus</span></span>';
-   if(l.dc)html+='<span class="lb lb-hr tip">📊 dc '+l.dc+'%<span class="tip-body"><b>Decoupling</b> (Pa:HR) · &lt;5% = aerobic base ติด · &gt;10% = base ไม่พอ / overpace / under-fueled</span></span>';
-   if(l.sl)html+='<span class="lb lb-hr tip">😴 sleep '+l.sl+'<span class="tip-body"><b>Sleep score</b> (0-100) คืนก่อนวิ่ง · composite: duration 50% + deep% 25% + awake 15% + rem% 10% · &ge;80 ดี, 60-79 กลางๆ, &lt;60 ต่ำ</span></span>';
-   const e=efOf(l);if(e&&t==='easy'&&l.env!=='tm'&&!l.mix)html+='<span class="lb lb-ef">EF '+e.toFixed(2)+'</span>';
-   if(l.env==='tm')html+='<span class="lb lb-tm">🏠 treadmill</span>';
+   if(more.length){
+    html+='<button type="button" class="lb lb-toggle" onclick="toggleMore(this)">+'+more.length+' <span class="lb-chev">▾</span></button>';
+    html+='<span class="lb-more">'+more.join('')+'</span>';
+   }
    html+='</div>';
    if(l.note)html+='<div class="log-note">'+l.note+'</div>';
    html+='</div></div>';
