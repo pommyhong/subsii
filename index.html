@@ -1365,6 +1365,9 @@ function exportICS(){
 }
 
 render();
+// countdown เดินจริง — tick ทุกนาที + สลับแอปกลับมาแล้วอัปเดตทันที (hero อย่างเดียว ไม่แตะ scroll/เมนูที่เปิดอยู่)
+setInterval(renderHero,6e4);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderHero()});
 // auto-scroll to today's schedule row on first load
 setTimeout(()=>{
  const todayRow=document.querySelector('.sched tr.today');
