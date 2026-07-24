@@ -198,8 +198,8 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .prog-bar{gap:16px;margin-top:24px}
 .pace,.legend{border-radius:12px}
 /* hero — dark race-poster style · checkered subtle texture */
-.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 28% 22%,#72d4ff 0%,#29aaef 42%,#1480d4 100%);border-radius:20px;padding:16px;margin-top:16px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.18)}
-.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(45deg,#0e6bbf 25%,transparent 25%,transparent 75%,#0e6bbf 75%),linear-gradient(45deg,#0e6bbf 25%,transparent 25%,transparent 75%,#0e6bbf 75%);background-size:28px 28px;background-position:0 0,14px 14px;opacity:.22;pointer-events:none;mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%);-webkit-mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%)}
+.hero{position:relative;overflow:hidden;background:radial-gradient(ellipse at 30% 22%,#22a6d6 0%,#1583b8 45%,#0a5578 100%);border-radius:20px;padding:16px;margin-top:16px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.hero::before{content:'';position:absolute;inset:0;background-image:linear-gradient(45deg,#0e6bbf 25%,transparent 25%,transparent 75%,#0e6bbf 75%),linear-gradient(45deg,#0e6bbf 25%,transparent 25%,transparent 75%,#0e6bbf 75%);background-size:28px 28px;background-position:0 0,14px 14px;opacity:0;pointer-events:none;mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%);-webkit-mask-image:linear-gradient(135deg,#000 0%,#000 35%,transparent 65%)}
 .hero-inner{position:relative;display:flex;align-items:center;column-gap:20px;row-gap:14px;flex-wrap:wrap}
 .hero-left{flex:1;min-width:200px}
 .hero-right{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
@@ -220,6 +220,12 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 .hero-prog-track{flex:1;height:6px;background:rgba(255,255,255,.18);border-radius:8px;overflow:hidden}
 .hero-prog-fill{height:100%;background:linear-gradient(90deg,#d4f54a,#9bd027);border-radius:8px;transition:width 1s cubic-bezier(.22,1,.36,1)}
 .hero-prog-v{font-size:11px;color:#d4f54a;font-weight:700;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}
+/* liquid shimmer fx — WebGL flowing gradient (danield-style) · sibling ถาวร ไม่โดน innerHTML ทับ */
+.hero-fx{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;border-radius:inherit}
+.hero-gl{position:absolute;inset:0;width:100%;height:100%;display:block;border-radius:inherit}
+.hero-fx-fallback{background:radial-gradient(ellipse at 30% 25%,#22a6d6 0%,#1583b8 45%,#0a5578 100%)}
+#hero-body{position:relative;z-index:1;text-shadow:0 1px 10px rgba(3,18,24,.55),0 1px 3px rgba(3,18,24,.5)}
+.hero-goal{text-shadow:none}
 /* race timeline — mini pills (others, below hero) */
 .race-line{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
 .rl-item{flex:1;min-width:220px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:14px}
@@ -439,7 +445,7 @@ body{background:var(--bg);font-family:'Google Sans',-apple-system,BlinkMacSystem
 <body>
 <div id="ptr"><div class="ptr-spin"></div><span id="ptr-txt">ดึงลงเพื่อรีเฟรช</span></div>
 <div class="app">
-<div class="hero" id="hero"></div>
+<div class="hero" id="hero"><div class="hero-fx" aria-hidden="true"></div><div id="hero-body"></div></div>
 <div id="races"></div>
 <div class="prog-bar" id="progbar"></div>
 <div id="content"></div>
@@ -490,6 +496,12 @@ const WEIGHTS_ROUTINE=[
  {l:'Compound (heavy first)',items:[['Goblet squat','3 × 8'],['RDL','3 × 8'],['Bulgarian split squat','3 × 8 /ขา'],['Hip thrust','3 × 10']]},
  {l:'Glute med · accessory',items:[['Calf raise','3 × 12'],['Monster walk (band)','2–3 × 15 /ทิศ'],['Clamshell (band)','2 × 15 /ข้าง']]},
  {l:'Core · plyo (last)',items:[['Side plank','3 × 30–40 วิ /ข้าง'],['Dead bug','3 × 10'],['Pogo hops','3 × 20 วิ']]},
+];
+// Upper — แบด (ตบแรง) + หลัง/ไหล่ V-taper · เลี่ยงแขนหนัก (ไม่ก้ามปู)
+const UPPER_ROUTINE=[
+ {l:'Pull · หลังกว้าง (V-taper)',items:[['Pull-up / Lat pulldown','3 × 8–10'],['Seated cable row','3 × 10'],['Face pull','3 × 15']]},
+ {l:'Shoulder · ไหล่สวย + capped',items:[['Overhead press','3 × 8'],['Lateral raise','3 × 12–15'],['Rear-delt fly','3 × 12']]},
+ {l:'Rotation · power ตบ (แบด)',items:[['Cable wood-chop','3 × 10 /ข้าง'],['Band external rotation','3 × 15'],['Scap push-up','2 × 12']]},
 ];
 
 // d=mon0..sun6, t=type, k=km, m=min, ti=title, de=desc, al=alt, ca=carb
@@ -606,11 +618,11 @@ const W=[
  {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
 ]},
 {w:13,p:'10K-Peak',f:'Peak — Mixed I + R',k:50,ls:78,d:[
- {d:0,t:'cross',k:0,m:55,ti:'Weights',de:'',ca:'rest'},
- {d:1,t:'quality',k:10,m:60,ti:'Q1: T-pace 4×1.5km',de:'WU 15\' → 4×1.5km T rest 90" → CD 10\'',ca:'quality'},
- {d:2,t:'easy',k:6,m:38,ti:'Easy 35 นาที',de:'',ca:'easy'},
- {d:3,t:'quality',k:10,m:62,ti:'Q2: I + R Mixed',de:'WU 15\' → 3×1200m I-pace rest 3\' + 3×200m @ R-pace (4:30–4:40) rest 200m jog → CD',al:'3×1000m I เท่านั้น',ca:'quality'},
- {d:4,t:'easy',k:5,m:32,ti:'Easy 30 นาที',de:'',ca:'easy'},
+ {d:0,t:'quality',k:10,m:60,ti:'Q1: T-pace 4×1.5km',de:'WU 15\' → 4×1.5km T rest 90" → CD 10\' · อยู่บ้าน คุม pace ได้',ca:'quality'},
+ {d:1,t:'rest',k:0,m:0,ti:'ตจว — rest / easy',de:'เดินทางต่างจังหวัด · วิ่งได้ = easy shakeout 20-30\' · ไม่ได้ = พักเต็ม (buffer ก่อน Q2)',ca:'rest'},
+ {d:2,t:'quality',k:10,m:62,ti:'Q2: I + R Mixed (ถ้ากลับทัน)',de:'WU 15\' → 3×1200m I-pace rest 3\' + 3×200m @ R-pace (4:30–4:40) rest 200m jog → CD · กลับไม่ทัน/ล้า = เลื่อนไป Thu',al:'3×1000m I เท่านั้น',ca:'quality'},
+ {d:3,t:'easy',k:6,m:38,ti:'Easy 35 นาที (Q2 fallback)',de:'พุธได้ = easy · พุธหลุด = Q2 I+R มาลงตรงนี้แทน',ca:'easy'},
+ {d:4,t:'cross',k:0,m:55,ti:'Weights + core',de:'ย้ายจากอังคารที่โดน travel · ถ้า Q2 เพิ่งลง Thu = ลดเหลือ easy/rest',ca:'rest'},
  {d:5,t:'long',k:16,m:100,ti:'Long Run 100 + 4 Strides',de:'6:10/km + strides ท้ายวิ่ง',ca:'long'},
  {d:6,t:'rest',k:0,m:0,ti:'พักสนิท',de:'',ca:'rest'},
 ]},
@@ -802,7 +814,7 @@ const SEED=/*SEED:START*/{
  'w8d5':{km:18.22,min:105.1,hr:163,hx:172,cad:176,env:"tm",type:"long",rpe:6,te:4.1,dc:-2.4,note:"ฝนตกย้าย TM 18.22km/105:05 · 5:46/km เร็วกว่า plan 6:10 แต่ HR163 avg คุมดี · negative split (2.82→2.96 m/s) dc -2.4% (lap-approx) = EF ดีขึ้นช่วงหลัง · Garmin feel=Very Strong/RPE6 self-report"},'w8d4':{km:6.25,min:36.7,hr:155,hx:163,cad:174,env:"tm",type:"easy",te:3,sl:71,note:"TM 6.25km/36:42 · 5:52/km display (~6:05 effort) · HR155/163 · cadence174.5 ต่ำกว่า w7d4(180)/HR สูงกว่า(148) = sleep score 71 🟡 predicted mild dip ✅"},'w8d2':{km:8.19,min:48.1,hr:151,hx:158,cad:175,env:"tm",type:"easy",te:2.9,dc:2.8,note:"HR151 ต่ำกว่า TM easy เดิม(163) pace ใกล้เท่ากัน = ฟิตขึ้น · dc lap-approx (Garmin ไม่มี per-sec) · ไม่เจอ strides ใน laps"},'w8d1':{km:8.98,min:64.6,hr:157.31,hx:191,cad:168,mix:1,ses:[4.53,3.03,1.42],bkm:4.53,bmin:26.4,type:"quality",rpe:8,te:3.4,note:"Q1 T-intervals outdoor 22:05 · 4×1km @ T (5:03/5:12/5:12/5:07) rest 90″ + WU3km+CD · pace ใน T zone เป๊ะ · HR drift 172→184 pace ไม่หล่น · ทำ 1km ไม่ใช่ 1.5km ตาม plan · RPE inferred"},'w8d0':{type:"cross",te:2,note:"เวท 71min · HR121 (backfill)"},
  'w9d5':{km:16.13,min:90.1,hr:164,hx:176,cad:177,env:"tm",type:"long",te:4.2,dc:-2,note:"TM 16.13km/90:05 · deload week แต่ตั้งใจใส่แรงทดสอบ 5:37/km avg (confirm ไม่ใช่ overpace) · dc -2% negative split (lap-approx)"},'w9d4':{km:5.41,min:30.5,hr:155,hx:165,cad:176,env:"tm",type:"easy",te:3,note:"TM 5.41km/30:31 · 5:38/km (~5:51 effort) HR141→163 drift+22 · เร็วกว่า E-zone ครั้งที่ 3 ของสัปดาห์"},'w9d2':{km:6.31,min:36.1,hr:156,hx:163,cad:175,env:"tm",type:"easy",te:3.1,note:"TM 6.31km/36:05 · 5:43/km (~5:56 effort) HR156 cad171→182 · pace เร็วกว่า E-zone วันที่ 2 หลัง hill effort"},'w9d1':{km:3.73,min:31.4,hr:162.47,hx:199,cad:166,mix:1,ses:[2.01,1.06,0.66],bkm:2.01,bmin:15.6,type:"quality",rpe:10,te:3.1,note:"Phra Khanong hill reps ครบ 8km (ปอม confirm, GPS under-record ใต้ตึก) · HR199/RPE10/feel50 = max effort ไม่ใช่ T คุมได้ (สะพานชัน)"},'w9d0':{type:"cross",te:1.7,sl:69,note:"เวทเบา 57min (moving ~20min) · HR118/max163 · cal280 · ตรง plan -30% recovery ก่อนเข้า Interval phase"},
  'w10d5':{km:22.25,min:148,hr:160.18,hx:179,cad:173,mix:1,ses:[20.22,2.03],bkm:20.22,bmin:127.5,type:"long",rpe:4,te:4.5,dc:6.6,sl:69,note:"Long 20.2km outdoor 6:18 · HR166 · dc 6.6% mild · เกิน plan +2.2km · เร็วกว่า w7d5 ~35s/km ที่ HR เท่ากัน"},'w10d4':{km:5.15,min:30.5,hr:157,hx:167,cad:173,env:"tm",type:"easy",te:3.1,sl:34,note:"Easy 30' ตรง cap sleep34 🟠 · 5:55 TM · HR drift 146→164 · lap4 เร่ง 5:41"},'w10d2':{km:7.63,min:43.5,hr:155.5,hx:182,cad:189,env:"tm",mix:1,ses:[4.01,2.59,1.03],bkm:4.01,bmin:18.3,type:"quality",rpe:6,te:2.9,note:"Q2 4×1000m I-pace ครั้งแรก ครบ · display 4:52→4:14 ไต่เร็วเกิน target · HR 167→171 คุมได้ · TM ไม่ calibrate · sleep glitch ข้าม sl"},'w10d1':{km:4.33,min:41.4,hr:138.43,hx:177,cad:166,mix:1,ses:[3.65,0.68],bkm:3.65,bmin:33.4,type:"cross",te:2.3,sl:51,note:"เวท recovery ตาม plan + bonus jog 3.65km ช้ามาก 9:09 แต่ HR145 (สะพาน+ร้อน+นอน5.98h)"},'w10d0':{km:8.4,min:50.9,hr:167.41,hx:189,cad:172,mix:1,ses:[3.52,2.65,2.23],bkm:3.52,bmin:19.8,type:"quality",te:3.1,note:"Q1 3×1km T 5:07/5:09/5:10 in-zone (target 5:00-5:30) · HR drift 171→181avg คุมได้ · CD ยาวกว่าแผน"},
- 'w11d2':{km:8.6,min:48.6,hr:159.12,hx:187,cad:188,env:"tm",mix:1,ses:[5.03,2.72,0.85],bkm:5.03,bmin:24.7,type:"quality",rpe:8,te:3.2,note:"Q2 5×1000m I-pace treadmill · 4:48-5:02/km (eff outdoor ~5:05-5:15) · HR174 avg/max187 · cad187 · ครบ 5 rep ไม่ตัดเหลือ 4 · sleep data ว่าง"},'w11d1':{km:5.41,min:38.3,hr:141.12,hx:163,cad:163,mix:1,ses:[5.03,0.38],bkm:5.03,bmin:32.8,type:"easy",rpe:3,te:2.4,sl:74,note:"Easy 5.03km outdoor 6:32 · HR146 วันหลัง T-190 = ฟื้นดี · plan=weights แต่วิ่งแทน · แบ่ง lap สลับ 6:19/6:53 จากไฟแดง"},'w11d0':{km:8.06,min:51.3,hr:166.68,hx:190,cad:176,mix:1,ses:[3.41,2.5,2.15],bkm:3.41,bmin:18,type:"quality",rpe:10,te:3.2,sl:66,note:"Q1 T-18 outdoor evening Dynafish · pace 5:17 ตรงเป้าแต่ HR180/max190 ทะลุ guardrail 178 ตั้งแต่ min5-6 ไม่ตัดจบ · sleep 5.12h score66 = ทายถูก ฝืนวิ่งเจ็บจริง"}
+ 'w11d4':{km:6.14,min:38.2,hr:153.21,hx:168,cad:178,env:"tm",mix:1,ses:[4.03,2.11],bkm:4.03,bmin:23.2,type:"easy",rpe:3,te:2.7,sl:77,note:"Easy 6.14km · outdoor 2.11km 7:07 แล้วต่อ treadmill 4.03km 5:45 · HR153 easy · 38min < plan 40 · sleep 6h score77"},'w11d2':{km:8.6,min:48.6,hr:159.12,hx:187,cad:188,env:"tm",mix:1,ses:[5.03,2.72,0.85],bkm:5.03,bmin:24.7,type:"quality",rpe:8,te:3.2,note:"Q2 5×1000m I-pace treadmill · 4:48-5:02/km (eff outdoor ~5:05-5:15) · HR174 avg/max187 · cad187 · ครบ 5 rep ไม่ตัดเหลือ 4 · sleep data ว่าง"},'w11d1':{km:5.41,min:38.3,hr:141.12,hx:163,cad:163,mix:1,ses:[5.03,0.38],bkm:5.03,bmin:32.8,type:"easy",rpe:3,te:2.4,sl:74,note:"Easy 5.03km outdoor 6:32 · HR146 วันหลัง T-190 = ฟื้นดี · plan=weights แต่วิ่งแทน · แบ่ง lap สลับ 6:19/6:53 จากไฟแดง"},'w11d0':{km:8.06,min:51.3,hr:166.68,hx:190,cad:176,mix:1,ses:[3.41,2.5,2.15],bkm:3.41,bmin:18,type:"quality",rpe:10,te:3.2,sl:66,note:"Q1 T-18 outdoor evening Dynafish · pace 5:17 ตรงเป้าแต่ HR180/max190 ทะลุ guardrail 178 ตั้งแต่ min5-6 ไม่ตัดจบ · sleep 5.12h score66 = ทายถูก ฝืนวิ่งเจ็บจริง"}
 }/*SEED:END*/;
 const DONESEED=/*DONE:START*/{
  'w0d6':1,'w0d5':1,'w0d2':1,'w0d1':1,
@@ -816,7 +828,7 @@ const DONESEED=/*DONE:START*/{
  'w8d5':1,'w8d4':1,'w8d2':1,'w8d1':1,'w8d0':1,
  'w9d5':1,'w9d4':1,'w9d2':1,'w9d1':1,'w9d0':1,
  'w10d5':1,'w10d4':1,'w10d2':1,'w10d1':1,'w10d0':1,
- 'w11d2':1,'w11d1':1,'w11d0':1
+ 'w11d4':1,'w11d3':1,'w11d2':1,'w11d1':1,'w11d0':1
 }/*DONE:END*/;
 // data = Strava-generated SEED/DONESEED เท่านั้น (read-only dashboard · ไม่อ่าน/เขียน localStorage)
 let log=JSON.parse(JSON.stringify(SEED));
@@ -859,6 +871,7 @@ function selWeek(i){selected=i;render();
  }
 }
 function setHRMode(m){window.__hrMode=m;render()}
+function setWMode(m){window.__wMode=m;render()}
 function toggleMore(btn){
  const more=btn.nextElementSibling;const open=more.classList.toggle('open');
  btn.classList.toggle('open',open);
@@ -897,7 +910,7 @@ function renderHero(){
  let dn=0,tot=0;W.forEach((w,wi)=>{dn+=wkDone(wi);tot+=wkTotal(wi)});
  const cw=Math.max(0,Math.min(curWeek(),W.length-1))+1;
  const pct=Math.round(dn/tot*100);
- const el=document.getElementById('hero');
+ const el=document.getElementById('hero-body');
  el.innerHTML=
   '<div class="hero-inner">'+
    '<div class="hero-left">'+
@@ -1268,14 +1281,20 @@ function render(){
   // RPE/intensity จาก plan title
   const wDay=w.d.find(day=>day.t==='cross'&&/weight/i.test(day.ti));
   const isLight=/light|เบา|-\d+%/i.test(wDay.ti+' '+(wDay.de||''));
+  const wMode=window.__wMode||'run';
+  const routine=wMode==='upper'?UPPER_ROUTINE:WEIGHTS_ROUTINE;
   html+='<div class="section-l">ท่าเวทประจำสัปดาห์</div>';
+  html+='<div class="hr-tabs">'+
+   '<button class="hr-tab'+(wMode==='run'?' active':'')+'" onclick="setWMode(\'run\')">🏃 วิ่ง (lower)</button>'+
+   '<button class="hr-tab'+(wMode==='upper'?' active':'')+'" onclick="setWMode(\'upper\')">🏸 Upper</button>'+
+   '</div>';
   html+='<div class="weights-card">';
-  WEIGHTS_ROUTINE.forEach(grp=>{
+  routine.forEach(grp=>{
    html+='<div class="weights-grp"><div class="weights-grp-l">'+grp.l+'</div>';
    grp.items.forEach(it=>{html+='<div class="weights-row"><b>'+it[0]+'</b><span>'+it[1]+'</span></div>'});
    html+='</div>';
   });
-  html+='<div class="weights-note">'+(isLight?'🟡 Deload week — ลด volume 30% (set น้อยลง หรือ weight เบาลง)':'RPE 7 · compound หนักก่อน → accessory + glute med → plyo ปิดท้าย')+'</div>';
+  html+='<div class="weights-note">'+(wMode==='upper'?'🏸 Upper: ตบแรงขึ้น (lat + rotation + rotator cuff) · หลัง/ไหล่ V-taper · ไม่เน้นแขน (เลี่ยงก้ามปู) · แทรกวันที่ไม่ชน quality/long':(isLight?'🟡 Deload week — ลด volume 30% (set น้อยลง หรือ weight เบาลง)':'RPE 7 · compound หนักก่อน → accessory + glute med → plyo ปิดท้าย'))+'</div>';
   html+='</div>';
  }
 
@@ -1409,6 +1428,51 @@ setTimeout(()=>{
    setTimeout(()=>location.replace(base+'?v='+Date.now()),350);
   }else ptr.style.height='0';
  },{passive:true});
+})();
+/* ===== hero liquid shader (WebGL fbm domain-warp · danield-style) ===== */
+(function(){
+ var host=document.querySelector('.hero-fx'); if(!host) return;
+ var cv=document.createElement('canvas'); cv.className='hero-gl'; host.appendChild(cv);
+ var gl=cv.getContext('webgl')||cv.getContext('experimental-webgl');
+ if(!gl){host.classList.add('hero-fx-fallback');return;}
+ var vs='attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}';
+ var fs=[
+ 'precision highp float;','uniform vec2 r;uniform float t;',
+ 'vec3 mod289(vec3 x){return x-floor(x*(1./289.))*289.;}',
+ 'vec2 mod289(vec2 x){return x-floor(x*(1./289.))*289.;}',
+ 'vec3 permute(vec3 x){return mod289(((x*34.)+1.)*x);}',
+ 'float snoise(vec2 v){const vec4 C=vec4(.211324865,.366025404,-.577350269,.024390243);',
+ ' vec2 i=floor(v+dot(v,C.yy));vec2 x0=v-i+dot(i,C.xx);',
+ ' vec2 i1=(x0.x>x0.y)?vec2(1.,0.):vec2(0.,1.);vec4 x12=x0.xyxy+C.xxzz;x12.xy-=i1;',
+ ' i=mod289(i);vec3 pp=permute(permute(i.y+vec3(0.,i1.y,1.))+i.x+vec3(0.,i1.x,1.));',
+ ' vec3 m=max(.5-vec3(dot(x0,x0),dot(x12.xy,x12.xy),dot(x12.zw,x12.zw)),0.);m=m*m;m=m*m;',
+ ' vec3 x=2.*fract(pp*C.www)-1.;vec3 h=abs(x)-.5;vec3 ox=floor(x+.5);vec3 a0=x-ox;',
+ ' m*=1.79284291-.85373472*(a0*a0+h*h);',
+ ' vec3 g;g.x=a0.x*x0.x+h.x*x0.y;g.yz=a0.yz*x12.xz+h.yz*x12.yw;return 130.*dot(m,g);}',
+ 'float fbm(vec2 p){float s=0.,a=.5;for(int i=0;i<4;i++){s+=a*snoise(p);p*=2.02;a*=.5;}return s;}',
+ 'void main(){vec2 uv=gl_FragCoord.xy/r;vec2 q=uv;q.x*=r.x/r.y;float tt=t*.04;',
+ ' vec2 w=vec2(fbm(q*.85+vec2(0.,tt)),fbm(q*.85+vec2(5.2,-tt)));',
+ ' float n=fbm(q*.95+w*1.9+vec2(tt*.6,0.));n=n*.5+.5;',
+ ' vec3 c1=vec3(.039,.271,.431),c2=vec3(.078,.549,.745),c3=vec3(.275,.784,.922),c4=vec3(.627,.941,1.0);',
+ ' vec3 col=mix(c1,c2,smoothstep(.15,.5,n));col=mix(col,c3,smoothstep(.5,.8,n));',
+ ' col=mix(col,c4,smoothstep(.82,1.,n)*.7);col*=1.-.25*length(uv-.5);',
+ ' gl_FragColor=vec4(col,1.);}'
+ ].join('\n');
+ function sh(ty,src){var s=gl.createShader(ty);gl.shaderSource(s,src);gl.compileShader(s);return s;}
+ var pr=gl.createProgram();gl.attachShader(pr,sh(gl.VERTEX_SHADER,vs));gl.attachShader(pr,sh(gl.FRAGMENT_SHADER,fs));gl.linkProgram(pr);
+ if(!gl.getProgramParameter(pr,gl.LINK_STATUS)){host.classList.add('hero-fx-fallback');cv.remove();return;}
+ gl.useProgram(pr);
+ var buf=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,3,-1,-1,3]),gl.STATIC_DRAW);
+ var loc=gl.getAttribLocation(pr,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+ var uR=gl.getUniformLocation(pr,'r'),uT=gl.getUniformLocation(pr,'t');
+ function size(){var b=host.getBoundingClientRect();var dpr=Math.min(window.devicePixelRatio||1,2);cv.width=Math.max(1,Math.round(b.width*dpr));cv.height=Math.max(1,Math.round(b.height*dpr));gl.viewport(0,0,cv.width,cv.height);}
+ size();
+ if(window.ResizeObserver){new ResizeObserver(size).observe(host);}else{window.addEventListener('resize',size);}
+ var reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,start=performance.now(),vis=true,raf=0;
+ function frame(now){var tm=(now-start)/1000;gl.uniform2f(uR,cv.width,cv.height);gl.uniform1f(uT,reduce?0.:tm);gl.drawArrays(gl.TRIANGLES,0,3);raf=(!reduce&&vis)?requestAnimationFrame(frame):0;}
+ function kick(){if(!raf&&!reduce&&vis)raf=requestAnimationFrame(frame);}
+ if(reduce){requestAnimationFrame(frame);}
+ else{if(window.IntersectionObserver){new IntersectionObserver(function(e){vis=e[0].isIntersecting;if(vis)kick();},{threshold:0}).observe(document.getElementById('hero'));}kick();}
 })();
 </script>
 </body>
