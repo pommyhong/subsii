@@ -919,12 +919,15 @@ SHEETS.raceday={
    ['เสื้อเปลี่ยน + ผ้าเช็ดตัว','ใส่กระเป๋าฝาก'],
    ['น้ำ + electrolyte','จิบระหว่างรอ หยุดจิบ ~04:30']]}]};
 // 🏁 แผนวิ่ง + เจล มาราธอน — ATMBKK sub-4 · set-based negative split ผูกเจล Xreal 30g · เพิ่ม 3 ก.ย. 2026
-// 1 เซท = 25 นาที = เจล 1 ซอง · เพซเป็น range (วันจริงไม่นิ่ง) · น้ำทุก 2 กม. · เผื่อคอร์ส 43 กม. · จบ 3:58
+// 1 เซท = 25 นาที คุมเพซ · เจลทุก 30 นาทีตามนาฬิกา แยกจากเซท (แก้ 06/11) · เพซเป็น range (วันจริงไม่นิ่ง) · น้ำทุก 2 กม. · เผื่อคอร์ส 43 กม. · จบ 3:58
 SHEETS.marathon={
  title:'🏁 แผนวิ่ง + เจล — มาราธอน',
- sub:'ATMBKK · 29 พ.ย. · sub-4 · 1 เซท = 25 นาที = เจล 1 ซอง',
+ sub:'ATMBKK · 29 พ.ย. · sub-4 · เซทละ 25 นาที · 🍯 เจลทุก 30 นาที',
  warn:'🎯 เผื่อคอร์สยาว <b>43 กม.</b> · หัวใจ <b>≤183 ชนะเพซเสมอ</b> · เวลาไว้เช็คหลวมๆ ทุก 30K ไม่ต้องไล่ทุกกิโล',
  blocks:[
+  {k:'tips',l:'🍯 เจลทุก 30 นาที · ตามนาฬิกา',rows:[
+   '<b>-15′</b> ก่อนปล่อยตัว · แล้ว <b>0:30 · 1:00 · 1:30 · 2:00 · 2:30 · 3:00 · 3:30</b> (8 ซอง)',
+   'ตั้งเตือนเวลาในนาฬิกาทุก 30 นาที · ไม่ผูกกับเซท ไม่รอหิว']},
   {k:'table',l:'ช่วง 1 · ออกตัว · 0:00–1:15',tag:'HR ≤178',rows:[
    ['SET 1','5:36–5:40','กม.0–4.4 · จบ 0:25'],
    ['SET 2','5:36–5:40','กม.4.4–8.9 · จบ 0:50'],
@@ -941,7 +944,8 @@ SHEETS.marathon={
    ['SET 10','เท่าที่ไหว','กม.40.6–43.0 · จบ 3:58']],hit:0},
   {k:'tips',l:'💧 น้ำ + เจล',rows:[
    'น้ำทุก <b>2 กม.</b> (2,4,6…42) · 1 เซทผ่าน ~2 จุดน้ำ',
-   'กินเจลจบทุกเซท → รับ<b>น้ำเปล่า</b>จุดถัดไป (ไม่ใช่สปอร์ตดริงก์)']},
+   '🍯 เจลทุก <b>30 นาที</b> ตามนาฬิกา (0:30 · 1:00 … 3:30) ไม่ใช่จบเซท → รับ<b>น้ำเปล่า</b>จุดถัดไป (ไม่ใช่สปอร์ตดริงก์)',
+   'กินต่อจนถึง 3:30 · <b>ห้ามหยุดกินตอนเร่ง</b> ช่วงหลังคือที่ที่ต้องการคาร์บที่สุด']},
   {k:'table',l:'📍 Checkpoint ทุก 5K',tag:'เวลาสะสม',rows:[
    ['5K','28:10','เพซ 5:38'],
    ['10K','56:20','เพซ 5:38'],
@@ -969,8 +973,9 @@ SHEETS.marathon={
    'ขาขึ้น: ปล่อยเพซช้าลง 10–15 วิ ยึด HR ไม่ฝืน · ขาลง: เก็บคืน ไม่เบรก',
    '⚠️ กม.สะพานจริงของ ATMBKK ยังไม่ปัก — รอ route map ทางการแล้วมาใส่'],},
   {k:'tips',l:'🍯 Fuel สรุป',rows:[
-   'เจล <b>Xreal 30g</b> ทุก 25 นาที (จบทุกเซท) = ~82g คาร์บ/ชม.',
-   'พก <b>11 ซอง</b> (กินจริง 10 · เผื่อหล่น 1) + pre-start 1 ซอง',
+   'เจล <b>Xreal 30g</b> ทุก 30 นาที = 60g + สปอร์ตดริงก์ ≈ <b>70g คาร์บ/ชม.</b>',
+   'พก <b>9 ซอง</b> (กินจริง 8 = ก่อนปล่อยตัว 1 + ระหว่างทาง 7 · เผื่อหล่น 1)',
+   'เช้าวันแข่ง <b>ห้ามมีนม</b> · ขนมปัง/แยม + น้ำ (ซ้อมแล้ว ท้องโอเค)',
    'เกลือแร่ <b>1 แคป/ชม.</b> (~4 แคป) · Carb-load 2 วันก่อน 10–12 g/kg',
    'ห้ามเปลี่ยนยี่ห้อเจลวัน race · ซ้อมกินให้ครบใน long run W23/25/27']}]};
 
@@ -1050,7 +1055,7 @@ SHEETS.mraceday={
    ['−0:05','เดินเข้า corral · ย่ำเท้าอยู่กับที่ อย่ายืนจนตัวเย็น','02:55'],
    ['ปืน','🏁 ออกตัว','03:00']],hit:6},
   {k:'tips',l:'🏁 แผนวิ่ง',rows:[
-   'Negative split ผูกเจล — เริ่ม 5:38 ไล่ขึ้น 5:28 · หัวใจ ≤183 · เผื่อ 43 กม.',
+   'Negative split — เริ่ม 5:38 ไล่ขึ้น 5:28 · 🍯 เจลทุก 30 นาที · หัวใจ ≤183 · เผื่อ 43 กม.',
    '→ รายละเอียดเต็ม + checkpoint ทุก 5K ดูการ์ด <b>"แผนวิ่ง + เจล"</b>',
    'กม.1–10 ห้ามเร็วกว่าแผนเด็ดขาด (จะรู้สึกสบาย = กับดัก)']},
   {k:'tips',l:'😴 เรื่องนอน (มาราธอนปล่อยเช้ามืด)',rows:[
@@ -1060,7 +1065,7 @@ SHEETS.mraceday={
   {k:'list',l:'🎒 เตรียมคืนวันเสาร์',tag:'วางไว้ข้างประตู',sep:'·',rows:[
    ['🗺️ เช็ค Maps → ล็อกเวลาออก','บ้าน → ราชดำเนิน'],
    ['BIB + เข็มกลัด','ติดเสื้อตั้งแต่คืนก่อน'],
-   ['🍯 gel 11 ซอง','Xreal 30g — ยี่ห้อที่ซ้อม ห้ามเปลี่ยน'],
+   ['🍯 gel 9 ซอง','Xreal 30g — ยี่ห้อที่ซ้อม ห้ามเปลี่ยน · กิน 8 เผื่อหล่น 1'],
    ['🧂 salt tab','~4 แคป (1/ชม.)'],
    ['👟 Metaspeed Sky Tokyo','ไซส์ 28.0'],
    ['นาฬิกาชาร์จเต็ม','+ ตั้ง alarm 2 ตัว'],
@@ -1369,7 +1374,7 @@ const W=[
  {d:3,t:'easy',k:4,m:25,ti:'Easy 25 + 4 Strides',de:'6:25/km',ca:'easy'},
  {d:4,t:'rest',k:0,m:0,ti:'พักสนิท + Carb Load D1',de:'8–10g/kg = 480–600g — เตรียม bib/เสื้อผ้า',ca:'race'},
  {d:5,t:'easy',k:3,m:20,ti:'Shakeout 3km + Carb Load D2',de:'4×100m strides — 480–600g คาร์บ',ca:'race'},
- {d:6,t:'race',k:42,m:240,ti:'🏁 ATMBKK Marathon Sub-4',de:'Negative split ผูกเจล — เริ่ม 5:38 ไล่ขึ้น 5:28 · 10 เซท × 25 นาที · หัวใจ ≤183 · เผื่อคอร์ส 43 กม. → กดการ์ด “แผนวิ่ง + เจล” ล่างสุด',ca:'race'},
+ {d:6,t:'race',k:42,m:240,ti:'🏁 ATMBKK Marathon Sub-4',de:'Negative split — เริ่ม 5:38 ไล่ขึ้น 5:28 · 10 เซท × 25 นาที · 🍯 เจลทุก 30 นาที · หัวใจ ≤183 · เผื่อคอร์ส 43 กม. → กดการ์ด “แผนวิ่ง + เจล” ล่างสุด',ca:'race'},
 ]},
 ];
 
@@ -1393,7 +1398,7 @@ try{const s=localStorage.getItem('mp-done');if(s)done=JSON.parse(s)}catch(e){}
 // env:'tm'=treadmill/incline → ตัดออกจาก EF · mix:1=หลาย activity วันเดียว → ตัดจาก EF
 // พยากรณ์ dew point + HR cap ของวันนั้น — เขียนโดย sync-dashboard.js จาก weather-cache.json
 // (weather.js ดึงจาก Open-Meteo · ถ้าดึงไม่ได้ค่าจะค้างของเดิม ดู as_of)
-const WX=/*WX:START*/{ "as_of": "2026-11-06 17:01", "source": "open-meteo", "days": { "2026-11-06": { "morning": { "dew": 24.1, "temp": 26.7, "rh": 86, "wind": 3, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" }, "evening": { "dew": 24.3, "temp": 27.3, "rh": 84, "wind": 4, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" } }, "2026-11-07": { "morning": { "dew": 24.5, "temp": 25.4, "rh": 94, "wind": 4, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" }, "evening": { "dew": 24.4, "temp": 27.2, "rh": 85, "wind": 1, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" } }, "2026-11-08": { "morning": { "dew": 23.8, "temp": 25, "rh": 93, "wind": 7, "cap": 167, "band": "ปกติ", "note": "E เต็มรูป" }, "evening": { "dew": 24.1, "temp": 27.2, "rh": 84, "wind": 6, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" } } } }/*WX:END*/;
+const WX=/*WX:START*/{ "as_of": "2026-11-06 20:47", "source": "open-meteo", "days": { "2026-11-06": { "morning": { "dew": 24.1, "temp": 26.7, "rh": 86, "wind": 3, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" }, "evening": { "dew": 24.4, "temp": 27.5, "rh": 84, "wind": 6, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" } }, "2026-11-07": { "morning": { "dew": 24, "temp": 25.9, "rh": 90, "wind": 3, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" }, "evening": { "dew": 23.8, "temp": 28.7, "rh": 75, "wind": 5, "cap": 167, "band": "ปกติ", "note": "E เต็มรูป" } }, "2026-11-08": { "morning": { "dew": 23.8, "temp": 25.1, "rh": 93, "wind": 7, "cap": 167, "band": "ปกติ", "note": "E เต็มรูป" }, "evening": { "dew": 24.1, "temp": 28.6, "rh": 77, "wind": 5, "cap": 172, "band": "อบอ้าว", "note": "+5 จากปกติ" } } } }/*WX:END*/;
 const SEED=/*SEED:START*/{
  'w0d1':{km:5.02,min:31.2,hr:162,hx:173,cad:178,env:"tm",type:"easy",te:3.5,sl:84,note:"TM easy 5.0km/31:22 · 6:15/km · HR162 (backfill)"},'w0d5':{km:14.36,min:102.4,hr:169,hx:180,cad:171,elev:115,type:"long",rpe:5,te:3.8,dc:11.6,sl:81,note:"Aerobic base กลับมา · 0 soreness post-run · dc 11.6% (retro-calc)"},'w0d2':{type:"cross",te:2.7,note:"แบด Beat 17min · HR153/max188 สั้นแต่แรง (backfill)"},'w0d6':{type:"cross",te:1.7,note:"แบด Tito 85min · HR113 เบา (backfill)"},
  'w1d1':{km:6.24,min:46.7,hr:159.99,hx:174,cad:171,elev:13,mix:1,ses:[5.71,0.53],bkm:5.71,bmin:40.2,bhr:165,bhx:174,type:"easy",rpe:1,te:3.1,sl:56,note:"easy 5.7km/40:19 · 7:04/km · HR165 + jog 0.5km แยก (backfill)"},'w1d2':{km:6.66,min:46.6,hr:168,hx:182,cad:172,elev:34,type:"easy",rpe:6,te:3.3,sl:61,note:"easy effort จริง แม้ heat 31°C"},'w1d3':{km:4.03,min:41.6,hr:161,hx:196,cad:160,elev:580,type:"easy",rpe:3,te:3.6,sl:79,note:"easy 4.0km Phra Khanong สะพาน · HR161/max196 (backfill)"},'w1d6':{km:16.57,min:109.9,hr:170,hx:182,cad:176,elev:124,type:"long",rpe:6,te:4.5,dc:10.5,note:"Breakthrough — ระยะ+pace ดีขึ้น HR เท่าเดิม · dc 10.5% (retro-calc · ยัง decoupled, ดีกว่า W0 นิดเดียว)"},'w1d0':{type:"cross",te:2.1,note:"เวท 48min · HR123 · squat+deadlift+pull-up (backfill)"},
@@ -2207,7 +2212,7 @@ function render(){
   const _mdd=Math.round((_mR.date-new Date(new Date().setHours(0,0,0,0)))/864e5);
   if(_mdd>=0){
    const _mgo='<span class="fuel-cta-go" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5 10.5 8 6 12.5"/></svg></span>';
-   const _msub=_mdd===0?'วันนี้แข่ง 🏁 · เจลทุก 25 นาที · หัวใจ ≤183':'อีก '+_mdd+' วัน · 10 เซท × 25 นาที · เจลผูกเพซ · หัวใจ ≤183';
+   const _msub=_mdd===0?'วันนี้แข่ง 🏁 · เจลทุก 30 นาที · หัวใจ ≤183':'อีก '+_mdd+' วัน · 10 เซท × 25 นาที · เจลทุก 30 นาที · หัวใจ ≤183';
    html+='<div class="section-l">🏁 มาราธอน · sub-4</div>';
    html+='<button class="fuel-cta" onclick="openSheet(\'marathon\')"><span class="fuel-cta-ic">🏁</span><span><span class="fuel-cta-t">แผนวิ่ง + เจล วันแข่ง</span><span class="fuel-cta-s">'+_msub+'</span></span>'+_mgo+'</button>';
    html+='<button class="fuel-cta" onclick="openSheet(\'load\')"><span class="fuel-cta-ic">🍚</span><span><span class="fuel-cta-t">โหลดคาร์บ + ซ้อมกิน</span><span class="fuel-cta-s">ใช้ตอน long run / 2 วันก่อน race · โหลด + gut training รายวีค</span></span>'+_mgo+'</button>';
